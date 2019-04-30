@@ -12,7 +12,7 @@ We figured that this libary could be very useful for others working in financial
 
 _TODO: Talk about the relationship between IVR and Financial Inclusion_
 
-## API
+## [API](https://vessels-tech.github.io/dfstalk/docs/index.html)
 
 _this is a draft api, and is currently under review before implementation_
 
