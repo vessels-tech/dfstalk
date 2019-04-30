@@ -16,22 +16,15 @@ _TODO: Talk about the relationship between IVR and Financial Inclusion_
 
 _this is a draft api, and is currently under review before implementation_
 
+We use OpenApi (formerly Swagger) to specify the api, which can be found [here](./swagger.yaml).  
 
+Browse the Swagger UI Editor [here](https://vessels-tech.github.io/dfstalk/docs/index.html)
 
 
 __Supported Languages__
 - Swahili
 - English
-- Bisaya (coming soon)_
-
-### Number
-
-Returns a link pointing to the generated audio for a given number
-
-- URL: /number/
-
-
-### `/date`
+- Bisaya _(coming soon)_
 
 
 
