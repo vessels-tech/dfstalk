@@ -1,0 +1,100 @@
+swagger: "2.0"
+info:
+  description: "DFS Talk Api"
+  version: "1.0.0"
+  title: "DFSTalk API"
+  contact:
+    email: "lewis@vesselstech.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "dfstalk.vessels.tech"
+basePath: "/v1"
+tags:
+- name: "number"
+  description: "Number generators"
+schemes:
+- "https"
+- "http"
+paths:
+  /number:
+    post:
+      tags:
+        - "number"
+      summary: "Generate an audio file for a given number"
+      description: ""
+      operationId: "getNumber"
+      consumes:
+        - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Specify the number and language to generate an audio file"
+        required: true
+        schema:
+          $ref: "#/definitions/NumberRequest"
+      responses:
+        200:
+          description: "successful generation"
+          schema:
+            $ref: "#/definitions/NumberResponse"
+            
+        400:
+          description: "bad request"
+        
+        404:
+          description: "Unsupported Language"
+          
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+    
+definitions:
+  NumberRequest:
+    type: "object"
+    properties:
+      language:
+        type: "string"
+        description: "The language code of the audio to be generated"
+        enum:
+        - "en"
+        - "sw"
+      number:
+        type: "number"
+        description: "The number to generate the audio for"
+      
+  NumberResponse:
+    type: "object"
+    properties:
+      expiry:
+        type: "integer"
+        format: "int64"
+        description: "the expiry time on the generated url (seconds)"
+      url:
+        type: "string"
+        format: "url"
+        description: "A url referring to the generated audio file"
+  
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about this service"
+  url: "https://github.com/vessels-tech/dfstalk"
