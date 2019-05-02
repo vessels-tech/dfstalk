@@ -8,7 +8,7 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:5000/dfs-talk/us-central1/"
+host: "localhost:5000/dfs-talk/us-central1"
 basePath: "/v1"
 tags:
 - name: "number"
