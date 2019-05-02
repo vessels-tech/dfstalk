@@ -2,31 +2,26 @@
 import validate from 'express-validation';
 import express from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
-//@ts-ignore
-import morganBody from 'morgan-body';
 import ErrorHandler from '../utils/ErrorHandler';
 
 import CreateNumberValidation from '../validators/CreateNumberValidation';
+import enableLogging from '../utils/Logging';
+import { validateBasicAuth } from '../middleware';
 
 const bodyParser = require('body-parser');
-
 
 module.exports = (functions: any) => {
   const app = express();
   app.use(bodyParser.json());
-  
-  if (process.env.VERBOSE_LOG === 'false') {
-    console.log('Using simple log');
-    app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
-  } else {
-    console.log('Using verbose log');
-    morganBody(app);
-  }
+  enableLogging(app); 
+ 
 
   /* CORS Configuration */
   const openCors = cors({ origin: '*' });
   app.use(openCors);
+
+  /* Auth Middleware */
+  app.use(validateBasicAuth);
 
 
   /**
@@ -45,6 +40,20 @@ module.exports = (functions: any) => {
       expiry: 10,
       url: "url.com",
     });
+  });
+
+  /**
+   * GetNumberLanguages
+   * 
+   * @description Gets the available language codes for the number audio generator
+   */
+  app.get('/languages', async (req, res) => {
+    
+    //TODO: make sure language code is available
+
+    res.json([
+      'en_au',
+    ]);
   });
 
 

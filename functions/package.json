@@ -17,6 +17,7 @@
     "@types/request-promise-native": "^1.0.15",
     "@types/swagger-express-validator": "^0.0.0",
     "@types/uuid": "^3.4.4",
+    "atob": "^2.1.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",

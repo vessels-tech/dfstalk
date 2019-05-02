@@ -65,6 +65,16 @@ run-local:
 	@make env
 	./_run_local.sh
 
+run-swagger-ui:
+	@make env
+	open "http://localhost:8000/docs/client_swagger_local.html"
+	python -m SimpleHTTPServer 
+
+#update the local swagger without changing the base path or other params
+update-local-swagger:
+	cat swagger.local_head.yaml > swagger.local.yaml
+	tail +19 swagger.yaml >> swagger.local.yaml
+
 ##
 # Tests
 ##

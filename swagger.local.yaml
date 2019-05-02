@@ -8,13 +8,12 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:5000/dfs-talk/us-central1"
-basePath: "/v1"
+host: "localhost:5000"
+basePath: "/dfs-talk/us-central1"
 tags:
 - name: "number"
   description: "Number generators"
 schemes:
-- "https"
 - "http"
 paths:
   /number:
@@ -44,13 +43,36 @@ paths:
         
         404:
           description: "Unsupported Language"
+  
+  /number/languages:
+    get:
+      tags:
+      - "number"
+      summary: "Gets the available language codes for the number audio generator"
+      description: ""
+      operationId: "GetNumberLanguages"
+      produces: 
+        - "application/json"
+      responses:
+        200:
+          description: "list of available language codes"
+          schema:
+            $ref: "#/definitions/GetNumberLanguagesResponse"
+            
+        400:
+          description: "bad request"
+        
+        404:
+          description: "Unsupported Language"
+      
+        
           
 securityDefinitions:
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-    
+  basicAuth:
+    type: basic
+security: 
+  - basicAuth: []
+
 definitions:
   NumberRequest:
     type: "object"
@@ -76,6 +98,12 @@ definitions:
         type: "string"
         format: "url"
         description: "A url referring to the generated audio file"
+        
+  GetNumberLanguagesResponse:
+    type: "array"
+    items:
+      type: "string"
+      
   
   Tag:
     type: "object"

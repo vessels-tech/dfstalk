@@ -1,0 +1,17 @@
+swagger: "2.0"
+info:
+  description: "DFS Talk Api - variant for running locally"
+  version: "1.0.0"
+  title: "DFSTalk API"
+  contact:
+    email: "lewis@vesselstech.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:5000"
+basePath: "/dfs-talk/us-central1"
+tags:
+- name: "number"
+  description: "Number generators"
+schemes:
+- "http"
