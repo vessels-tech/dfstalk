@@ -23,7 +23,7 @@ paths:
         - "number"
       summary: "Generate an audio file for a given number"
       description: ""
-      operationId: "getNumber"
+      operationId: "CreateNumber"
       consumes:
         - "application/json"
       parameters:

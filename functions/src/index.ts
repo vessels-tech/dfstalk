@@ -1,8 +1,8 @@
 import * as functions from 'firebase-functions';
 
 
-const quotes = require('./handlers/quotes')(functions);
+const number = require('./handlers/number')(functions);
 
 export default {
-  quotes
+  number
 }

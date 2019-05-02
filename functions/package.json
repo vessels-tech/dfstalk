@@ -12,8 +12,10 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@types/joi": "^14.3.3",
     "@types/morgan": "^1.7.35",
     "@types/request-promise-native": "^1.0.15",
+    "@types/swagger-express-validator": "^0.0.0",
     "@types/uuid": "^3.4.4",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -29,7 +31,9 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "request-promise-native": "^1.0.7",
-    "uuid": "^3.3.2"
+    "swagger-express-validator": "^1.0.0",
+    "uuid": "^3.3.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "tslint": "~5.8.0",
