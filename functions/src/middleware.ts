@@ -19,7 +19,6 @@ export const validateBasicAuth = async (req: any, res: any, next: any) => {
   }
 
   const { username, password } = authHeaderResult.result;
-  console.log("username and password", username, password);
 
   return verifyUsernameAndPassword(username, password)
   .then(result => {

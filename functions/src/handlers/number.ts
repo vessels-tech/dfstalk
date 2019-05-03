@@ -7,8 +7,12 @@ import ErrorHandler from '../utils/ErrorHandler';
 import CreateNumberValidation from '../validators/CreateNumberValidation';
 import enableLogging from '../utils/Logging';
 import { validateBasicAuth } from '../middleware';
+import { unsafeUnwrap } from '../utils/AppProviderTypes';
+import NumberBuilder from '../api/NumberBuilder';
 
 const bodyParser = require('body-parser');
+require('express-async-errors');
+
 
 module.exports = (functions: any) => {
   const app = express();
@@ -31,9 +35,10 @@ module.exports = (functions: any) => {
   app.post('/', validate(CreateNumberValidation), async (req, res) => {
     const { language, number } = req.body;
 
-    console.log("lang and number is:", language, number);
 
     //TODO: make sure language code is available
+    const audioFiles = unsafeUnwrap(await NumberBuilder.buildNumber(number, language));
+    console.log("audio files are", audioFiles);
 
     //Using NumberBuilder, generate a list of audio files to be compiled
     //Using FileBuilder, load files and append into a single file
@@ -56,7 +61,7 @@ module.exports = (functions: any) => {
     //TODO: make sure language code is available
 
     res.json([
-      'en_au',
+      'en_AU_male',
     ]);
   });
 

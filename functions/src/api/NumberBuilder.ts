@@ -1,4 +1,4 @@
-import { makeError, makeSuccess, SomeResult, ResultType } from "../utils/AppProviderTypes";
+import { makeSuccess, SomeResult, ResultType } from "../utils/AppProviderTypes";
 
 import {
   languageSelector,
@@ -28,14 +28,13 @@ export default class NumberBuilder {
 
     const builder = builderResult.result;
 
-
     //split the numbers by digit places, order lowest place first (1's, 10's, 100's etc)
     const digitPlaces =  Math.floor(number).toString().split('').reverse().map(s => parseInt(s));
     const audioFiles: Array<string> = [];
 
     //First naive approach
-    let lastDigit = 0
-    let nextDigit;
+    let lastDigit: number | undefined;
+    let nextDigit: number | undefined;
     digitPlaces.forEach((d, idx) => {
       if (idx <= digitPlaces.length - 2) {
         nextDigit = digitPlaces[idx + 1];
@@ -44,6 +43,7 @@ export default class NumberBuilder {
       }
       //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
       const files = builder(d, idx, lastDigit, nextDigit).reverse();
+
       files.forEach(f => audioFiles.unshift(f));
       lastDigit = d;
     });

@@ -81,7 +81,7 @@ definitions:
         type: "string"
         description: "The language code of the audio to be generated"
         enum:
-        - "en"
+        - "en_AU_male"
         - "sw"
       number:
         type: "number"

@@ -1,14 +1,22 @@
+import { isNullOrUndefined } from "util";
 
 
-const fileForNumberAndPlace = (digit: number, place: number, lastDigit: number, nextDigit?: number): string[] => {
+const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number, nextDigit?: number): string[] => {
   if (place === 0) {
+
     //If this is the second number in a teen, don't return anything
     if (nextDigit === 1) {
       return [];
     }
 
     switch (digit) {
-      case 0: return [];
+      case 0: {
+        if (isNullOrUndefined(nextDigit) && isNullOrUndefined(lastDigit)) {
+          return ['zero'];
+        }
+
+        return [];
+      }
       case 1: return ['one'];
       case 2: return ['two'];
       case 3: return ['three'];
@@ -85,7 +93,7 @@ const fileForNumberAndPlace = (digit: number, place: number, lastDigit: number, 
 
   if (place === 7) {
     //10-millions,
-    const root = fileForNumberAndPlace(digit, 1, lastDigit);
+    const root = fileForNumberAndPlace(digit, 1, lastDigit, nextDigit);
     return root;
   }
 
