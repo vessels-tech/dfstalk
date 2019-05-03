@@ -1,4 +1,4 @@
-import { app, auth } from './api/FirebaseClient';
+import { auth } from './api/FirebaseClient';
 import { SomeResult, makeError, makeSuccess, ResultType } from "./utils/AppProviderTypes";
 const atob = require('atob');
 
@@ -67,14 +67,12 @@ function getAuthHeader(req: any): SomeResult<{username: string, password: string
  */
 async function verifyUsernameAndPassword(username: string, password: string): Promise<SomeResult<string>> {
 
-  return Promise.resolve(makeSuccess("1"));
-
-  //@ts-ignore
-  // return auth.signInWithEmailAndPassword(username, password)
-  // .then(() => {
-  //   return makeSuccess('1');
-  // })
-  // .catch((error: Error) => {
-  //   return makeError(error.message);
-  // });  
+  return auth.signInWithEmailAndPassword(username, password)
+  .then(() => {
+    //TODO: Get the user's id here
+    return makeSuccess<string>("1");
+  })
+  .catch((error: Error) => {
+    return makeError<string>(error.message);
+  });  
 }
