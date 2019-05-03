@@ -23,3 +23,4 @@ function getBoolean(value: any) {
 const envConfig = functions.config();
 
 export const verboseLog = getBoolean(envConfig.config.verbose_log);
+export const apiKey = envConfig.config.api_key;

@@ -1,7 +1,6 @@
+import { app, auth } from './api/FirebaseClient';
 import { SomeResult, makeError, makeSuccess, ResultType } from "./utils/AppProviderTypes";
 const atob = require('atob');
-
-
 
 /**
  * Middleware to validate a user's username and password in Basic Auth header
@@ -14,16 +13,16 @@ export const validateBasicAuth = async (req: any, res: any, next: any) => {
 
   const authHeaderResult = getAuthHeader(req);
   if (authHeaderResult.type === ResultType.ERROR) {
+    console.log("authentication error:", authHeaderResult.message);
     res.status(401).send('Unauthenticated');
     return;
   }
 
   const { username, password } = authHeaderResult.result;
-  console.log("username and pwd")
+  console.log("username and password", username, password);
 
   return verifyUsernameAndPassword(username, password)
   .then(result => {
-
     if (result.type === ResultType.ERROR) {
       res.status(403).send('Unauthorized');
       return;
@@ -45,7 +44,7 @@ function getAuthHeader(req: any): SomeResult<{username: string, password: string
     return makeError("No Headers or Authorization header");
   }
 
-  const authHeaderString = req.header.authorization.replace('Basic ');
+  const authHeaderString = req.headers.authorization.replace('Basic ', '');
   const [username, password] = atob(authHeaderString).split(':');
   if (!username || !password) {
     return makeError("No username or password found in Basic auth header")
@@ -68,6 +67,14 @@ function getAuthHeader(req: any): SomeResult<{username: string, password: string
  */
 async function verifyUsernameAndPassword(username: string, password: string): Promise<SomeResult<string>> {
 
-  //TODO: implement call to Firebase!
-  return Promise.resolve(makeSuccess('1'));
+  return Promise.resolve(makeSuccess("1"));
+
+  //@ts-ignore
+  // return auth.signInWithEmailAndPassword(username, password)
+  // .then(() => {
+  //   return makeSuccess('1');
+  // })
+  // .catch((error: Error) => {
+  //   return makeError(error.message);
+  // });  
 }

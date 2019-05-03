@@ -15,7 +15,6 @@ module.exports = (functions: any) => {
   app.use(bodyParser.json());
   enableLogging(app); 
  
-
   /* CORS Configuration */
   const openCors = cors({ origin: '*' });
   app.use(openCors);
