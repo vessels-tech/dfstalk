@@ -35,6 +35,11 @@ module.exports = (functions: any) => {
 
     //TODO: make sure language code is available
 
+    //Using NumberBuilder, generate a list of audio files to be compiled
+    //Using FileBuilder, load files and append into a single file
+    //Set expiry on file, upload to storage
+    //get the download url, and format response
+
     res.json({
       expiry: 10,
       url: "url.com",
