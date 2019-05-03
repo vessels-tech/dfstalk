@@ -9,6 +9,7 @@ import enableLogging from '../utils/Logging';
 import { validateBasicAuth } from '../middleware';
 import { unsafeUnwrap } from '../utils/AppProviderTypes';
 import NumberBuilder from '../api/NumberBuilder';
+import FileBuilder from '../api/FileBuilder';
 
 const bodyParser = require('body-parser');
 require('express-async-errors');
@@ -40,8 +41,10 @@ module.exports = (functions: any) => {
     console.log("audio files are", audioFiles);
 
     //Using FileBuilder, load files and append into a single file
+    const file = unsafeUnwrap(await FileBuilder.createFile(audioFiles, language));
 
-    
+    console.log('file is', file);
+
     //Set expiry on file, upload to storage
     //get the download url, and format response
 

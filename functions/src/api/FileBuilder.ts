@@ -1,5 +1,10 @@
 import { SomeResult, makeError, makeSuccess } from "../utils/AppProviderTypes";
-const audioconcat = require('audioconcat')
+// const audioconcat = require('audioconcat');
+const uuidv4 = require('uuid/v4');
+
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
+const FfmpegCommand = require('fluent-ffmpeg')
+FfmpegCommand.setFfmpegPath(ffmpegPath)
 
 
 /**
@@ -20,42 +25,42 @@ class FileBuilder {
   public static async createFile(audioFiles: string[], language: string): Promise<SomeResult<string>> {
 
     const files = [
-      'one',
-      'two',
+      'three',
+      'five',
       'three',
     ];
-    return concatAudioPromise('../audio/en_AU_male/', files);
-
-    // return Promise.resolve(makeError("OH NO"));
+    //TODO: get this dir somehow...
+    const audioDir = `${__dirname}/../../src/audio/en_AU_male`;
+    console.log("audioDir is", audioDir);
+    // return concatAudioPromise('/Users/ldaly/developer/vessels/tz/dfstalk/functions/src/audio/en_AU_male', files);
+    return concatAudioPromise(audioDir, files);
   }
-
 }
 
 function concatAudioPromise(basePath: string, audioFiles: string[]): Promise<SomeResult<any>> {
-
   const filesWithPath = audioFiles.map(f => `${basePath}/${f}.mp3`);
-  console.log('filesWithPath are', filesWithPath);
+  const filename = uuidv4();
+  const fullFile = `/tmp/${filename}.mp3`;
 
   return new Promise((resolve, reject) => {
 
-    audioconcat(filesWithPath)
-    .concat('/tmp/all.mp3')
-    .on('start', function (command: any) {
-      console.log('ffmpeg process started:', command)
-    })
-    .on('error', function (err: any, stdout: any, stderr: any) {
-      console.error('Error:', err)
-      console.error('ffmpeg stderr:', stderr)
+    const filter = 'concat:' + filesWithPath.join('|')
+    const renderer = FfmpegCommand()
+      .input(filter)
+      .outputOptions('-acodec copy')
 
-      return resolve(makeError(err));
+    renderer.save(fullFile)
+      .on('error', function (err: any, stdout: any, stderr: any) {
+        console.error('Error:', err)
+        console.error('ffmpeg stderr:', stderr)
 
-    })
-    .on('end', function (output: any) {
-      console.error('Audio created in:', output);
+        return resolve(makeError(err));
 
-      return resolve(makeSuccess(output));
-    })
-  })
+      })
+      .on('end', () => {
+        return resolve(makeSuccess(fullFile));
+      })
+  });
 }
 
 

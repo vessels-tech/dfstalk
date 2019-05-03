@@ -93,6 +93,10 @@ test-service:
 ##
 deploy:
 	# @make env lint build
+	firebase functions:config:set \
+		config.verbose_log=${VERBOSE_LOG} \
+		config.api_key=${API_KEY}
+
 	firebase deploy --only functions
 
 deploy-public:
