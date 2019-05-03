@@ -39,12 +39,9 @@ module.exports = (functions: any) => {
 
     //Using NumberBuilder, generate a list of audio files to be compiled
     const audioFiles = unsafeUnwrap(await NumberBuilder.buildNumber(number, language));
-    console.log("audio files are", audioFiles);
 
     //Using FileBuilder, load files and append into a single file
     const file = unsafeUnwrap(await FileBuilder.createFile(audioFiles, language));
-
-    console.log('file is', file);
 
     const expiry = 60 * 60; //60 minutes
     const publicUrl = unsafeUnwrap(await uploadPublicFile(file, expiry));

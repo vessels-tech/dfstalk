@@ -23,17 +23,8 @@ class FileBuilder {
    */
 
   public static async createFile(audioFiles: string[], language: string): Promise<SomeResult<string>> {
-
-    const files = [
-      'three',
-      'five',
-      'three',
-    ];
-    //TODO: get this dir somehow...
     const audioDir = `${__dirname}/../../src/audio/en_AU_male`;
-    console.log("audioDir is", audioDir);
-    // return concatAudioPromise('/Users/ldaly/developer/vessels/tz/dfstalk/functions/src/audio/en_AU_male', files);
-    return concatAudioPromise(audioDir, files);
+    return concatAudioPromise(audioDir, audioFiles);
   }
 }
 
