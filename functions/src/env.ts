@@ -24,3 +24,5 @@ const envConfig = functions.config();
 
 export const verboseLog = getBoolean(envConfig.config.verbose_log);
 export const apiKey = envConfig.config.api_key;
+export const bucketName = envConfig.config.bucket_name;
+export const projectId = envConfig.config.project_id;

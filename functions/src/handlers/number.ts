@@ -10,6 +10,7 @@ import { validateBasicAuth } from '../middleware';
 import { unsafeUnwrap } from '../utils/AppProviderTypes';
 import NumberBuilder from '../api/NumberBuilder';
 import FileBuilder from '../api/FileBuilder';
+import { uploadPublicFile } from '../api/FBStorageApi';
 
 const bodyParser = require('body-parser');
 require('express-async-errors');
@@ -45,12 +46,15 @@ module.exports = (functions: any) => {
 
     console.log('file is', file);
 
+    const expiry = 60 * 60; //60 minutes
+    const publicUrl = unsafeUnwrap(await uploadPublicFile(file, expiry));
+
     //Set expiry on file, upload to storage
     //get the download url, and format response
 
     res.json({
       expiry: 10,
-      url: "url.com",
+      url: publicUrl,
     });
   });
 
