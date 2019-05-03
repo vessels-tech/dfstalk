@@ -35,13 +35,13 @@ module.exports = (functions: any) => {
   app.post('/', validate(CreateNumberValidation), async (req, res) => {
     const { language, number } = req.body;
 
-
-    //TODO: make sure language code is available
+    //Using NumberBuilder, generate a list of audio files to be compiled
     const audioFiles = unsafeUnwrap(await NumberBuilder.buildNumber(number, language));
     console.log("audio files are", audioFiles);
 
-    //Using NumberBuilder, generate a list of audio files to be compiled
     //Using FileBuilder, load files and append into a single file
+
+    
     //Set expiry on file, upload to storage
     //get the download url, and format response
 
