@@ -18,8 +18,8 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": "main"
+        "source": "number/**",
+        "function": "number"
       }
     ]
   }

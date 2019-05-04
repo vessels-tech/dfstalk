@@ -15,8 +15,9 @@ tags:
   description: "Number generators"
 schemes:
 - "http"
+- "http"
 paths:
-  /number:
+  /number/:
     post:
       tags:
         - "number"

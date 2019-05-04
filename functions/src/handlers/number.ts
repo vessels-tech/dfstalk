@@ -28,13 +28,17 @@ module.exports = (functions: any) => {
   /* Auth Middleware */
   app.use(validateBasicAuth);
 
+  app.get('/number', async (req, res) => {
+    return res.json("TESTING 123");
+  });
+
 
   /**
    * CreateNumber
    * 
    * @description Specify the number and language to generate an audio file
    */
-  app.post('/', validate(CreateNumberValidation), async (req, res) => {
+  app.post('/number', validate(CreateNumberValidation), async (req, res) => {
     const { language, number } = req.body;
 
     //Using NumberBuilder, generate a list of audio files to be compiled
@@ -50,7 +54,7 @@ module.exports = (functions: any) => {
     //get the download url, and format response
 
     res.json({
-      expiry: 10,
+      expiry: 60 * 60 * 24, //1 day, this is currently managed in the cloud storage lifecycle management
       url: publicUrl,
     });
   });
@@ -60,7 +64,7 @@ module.exports = (functions: any) => {
    * 
    * @description Gets the available language codes for the number audio generator
    */
-  app.get('/languages', async (req, res) => {
+  app.get('/number/languages', async (req, res) => {
     
     //TODO: make sure language code is available
 

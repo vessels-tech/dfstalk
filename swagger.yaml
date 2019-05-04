@@ -8,8 +8,8 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-# host: "dfstalk.vessels.tech"
-host: "us-central1-dfs-talk.cloudfunctions.net"
+host: "dfstalk.vessels.tech"
+# host: "us-central1-dfs-talk.cloudfunctions.net"
 # basePath: "/v1"
 tags:
 - name: "number"
