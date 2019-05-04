@@ -3,11 +3,18 @@
 
 ## Motivation
 
-This service was born out of a need to convert currency amounts _"eg. 120,329 Shillings"_ into intelligible audio in Swahili for IVR messages to rural Tanzanians. When we talked to some developers from Jumo, we realised that this was a shared need, and thought this would be a great partnership opportunity. 
+This service was born out of a need to convert currency amounts _"eg. 120,329 Shillings"_ and other numbers _"eg. 23.45 kilograms"_ into intelligible audio in Swahili for IVR messages to rural Tanzanians. When we talked to some developers from [Jumo](https://www.jumo.world/), we realised that this was a shared need, and thought this would be a great partnership opportunity. 
 
-We figured that this libary could be very useful for others working in to develop IVR applications for financial inclusion in Africa and around the world, and thus decided to release it publicly under an Open Source license. The hope for this project is that others can add their own languages (no matter how specific) and benefit financial inclusion projects around the world.
+We figured that this libary could be very useful for others working in to develop IVR applications for financial inclusion in Africa and around the world, and thus decided to release it publicly under an Open Source license. The hope for this project is that others can add their own languages and benefit financial inclusion projects around the world.
 
-_TODO: Talk about the relationship between IVR and Financial Inclusion_
+
+### Wait. IVR and Financial Inclusion?
+
+Yes. That's right.
+
+Since 2017 we have been working along with [Teller](textteller.com) and [Ker-twang](http://ker-twang.com/) on building more inclusive financial services across a number of countries and markets. We learned that many people recieve text messages from mobile money operators or cash disbursement programmes. For low-income people with poor literacy or poor eyesight, reading text messages with numbers on a screen isn't a great experience.
+
+We've been crafting IVR (Interactive Voice Response) experiences that aim to engage these very people, and thus needed a way to read out numbers to them in their own native language. We believe that this library can be a small piece in enabling organizations around the world to better engage their customers over voice.
 
 
 ## Example
@@ -28,9 +35,7 @@ _(coming soon!)_
 
 _This is a draft api, and is currently under review before wider implementation_
 
-We use OpenApi (formerly Swagger) to specify the api, which can be found [here](./swagger.yaml).  
-
-Browse the Swagger UI Editor [here](https://vessels-tech.github.io/dfstalk/docs/index.html)
+The API is specified in YAML using the OpenApi v2 spec. You can find the api spec at [./swagger.yaml](./swagger.yaml). You can also browse the api with the Swagger UI Editor [here](https://vessels-tech.github.io/dfstalk/docs/index.html)
 
 __Supported Languages__
 
@@ -43,14 +48,11 @@ __Supported Languages__
 
 ### Authentication
 
-Authentication is performed using Basic Auth.
-
-Include an auth header: `Authorization: Basic <base64Encode('username:password')>`
+Authentication is performed using Basic Auth. Simply include an auth header: `Authorization: Basic <base64Encode('username:password')>` in your requests.
 
 For example, where username=email@example.com and password=password
 Auth header value is:  
-  
-`Basic ZW1haWxAZXhhbXBsZS5jb206cGFzc3dvcmQ=`
+  `Basic ZW1haWxAZXhhbXBsZS5jb206cGFzc3dvcmQ=`
 
 e.g.:
 ```bash
@@ -60,6 +62,55 @@ curl -X POST "https://us-central1-dfs-talk.cloudfunctions.net/number/" \
   -H "Content-Type: application/json" \
   -d "{ \"language\": \"en_AU_male\", \"number\": 1032}"
 ```
+
+
+### Endpoints
+
+Below is a summary of the key endpoints to use the library. You can browse the full API [here](https://vessels-tech.github.io/dfstalk/docs/index.html).
+
+#### `POST /number`
+
+Generates audio for a given number and language code.
+
+Request Format:
+```json
+{
+  "language": "<supported language code>",
+  "number": integer
+}
+```
+
+Response Format:
+
+```json
+{
+  "expiry": <time in seconds>,
+  "url": <url of the generated audio. Will be deleted after the expiry time>
+}
+```
+
+##### For example:
+
+```bash
+curl -X POST "https://us-central1-dfs-talk.cloudfunctions.net/number/" \
+  -H "accept: application/json" \
+  -H "authorization: Basic ZW1haWxAZXhhbXBsZS5jb206cGFzc3dvcmQ=" \
+  -H "Content-Type: application/json" \
+  -d "{ \"language\": \"en_AU_male\", \"number\": 239572}"
+```
+
+Response:
+```json
+{
+  "expiry": 86400,
+  "url": "https://www.googleapis.com/download/storage/v1/b/dfs-talk.appspot.com/o/generated%2Fee19ce03-5a41-4e90-a113-dfc043c57d4e.mp3?alt=media&token=1111222233334444"
+}
+```
+
+#### `POST /date/`
+
+_coming soon!_
+
 
 ## Public Access
 
@@ -86,4 +137,6 @@ Copyright (c) 2019 Vessels Tech
 
 - [Vessels Tech](https://vesselstech.com)
 - [Jumo](https://www.jumo.world/)
+- [Teller](https://textteller.com)
+- [Ker-twang](http://ker-twang.com/)
 
