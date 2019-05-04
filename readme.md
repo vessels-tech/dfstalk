@@ -12,7 +12,9 @@ _TODO: Talk about the relationship between IVR and Financial Inclusion_
 
 ## Example
 
-DFS Talk is able to convert complicated numbers into audio by stitching together individual audio files.
+DFS Talk is able to convert complicated numbers into audio by stitching together individual audio files. There's no magic going on here with complex speech synthesis; we are just appending different words until it makes a number.
+
+Below are some examples of numbers that have been converted to audio:
 
 ### English:
 - 2976 with an Australian Male Accent [link](./docs/audio/en_AU_male_2976.mp3)
