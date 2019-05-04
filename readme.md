@@ -136,7 +136,6 @@ Copyright (c) 2019 Vessels Tech
 ## Contributors
 
 - [Vessels Tech](https://vesselstech.com)
-- [Jumo](https://www.jumo.world/)
 - [Teller](https://textteller.com)
 - [Ker-twang](http://ker-twang.com/)
 
@@ -146,4 +145,5 @@ Copyright (c) 2019 Vessels Tech
 All of this work is made possible with generous funding from [DFSLab](https://dfslab.net/), a Funtech incubator backed by the Bill and Melinda Gates Foundation.
 
 ![dfs logo](./docs/img/dfs_logo.jpg | width=100)
+![gates logo](./docs/img/gates_logo.jpg | width=100)
 
