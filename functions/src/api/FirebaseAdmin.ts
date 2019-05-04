@@ -1,7 +1,7 @@
 // const admin = require('firebase-admin');
 import * as admin from 'firebase-admin';
 
-let firestore;
+let firestore: FirebaseFirestore.Firestore;
 
 if (admin.apps.length === 0) {
   admin.initializeApp();
@@ -13,6 +13,7 @@ if (admin.apps.length === 0) {
 }
 
 const auth = admin.auth();
+//@ts-ignore
 if (!firestore) {
   firestore = admin.firestore();
 }

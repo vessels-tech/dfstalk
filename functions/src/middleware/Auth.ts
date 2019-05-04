@@ -1,6 +1,7 @@
-import { auth } from './api/FirebaseClient';
-import { SomeResult, makeError, makeSuccess, ResultType } from "./utils/AppProviderTypes";
+import { auth } from '../api/FirebaseClient';
+import { SomeResult, makeError, makeSuccess, ResultType } from "../utils/AppProviderTypes";
 const atob = require('atob');
+const btoa = require('btoa');
 
 /**
  * Middleware to validate a user's username and password in Basic Auth header
@@ -27,7 +28,7 @@ export const validateBasicAuth = async (req: any, res: any, next: any) => {
       return;
     }
 
-    req.user = result.result;
+    req.uid = result.result;
     return next();
   });
 }
@@ -69,7 +70,8 @@ async function verifyUsernameAndPassword(username: string, password: string): Pr
   return auth.signInWithEmailAndPassword(username, password)
   .then(() => {
     //TODO: Get the user's id here
-    return makeSuccess<string>("1");
+    //This is just a base64 encoded username
+    return makeSuccess<string>(btoa(username));
   })
   .catch((error: Error) => {
     return makeError<string>(error.message);

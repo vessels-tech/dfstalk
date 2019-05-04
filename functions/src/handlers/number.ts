@@ -6,11 +6,12 @@ import ErrorHandler from '../utils/ErrorHandler';
 
 import CreateNumberValidation from '../validators/CreateNumberValidation';
 import enableLogging from '../utils/Logging';
-import { validateBasicAuth } from '../middleware';
+import { validateBasicAuth } from '../middleware/Auth';
 import { unsafeUnwrap } from '../utils/AppProviderTypes';
 import NumberBuilder from '../api/NumberBuilder';
 import FileBuilder from '../api/FileBuilder';
 import { uploadPublicFile } from '../api/FBStorageApi';
+import { rateLimit } from '../middleware/RateLimit';
 
 const bodyParser = require('body-parser');
 require('express-async-errors');
@@ -27,6 +28,11 @@ module.exports = (functions: any) => {
 
   /* Auth Middleware */
   app.use(validateBasicAuth);
+
+  /* Rate Limit Middleware */
+  app.use(rateLimit);
+
+
 
   app.get('/number', async (req, res) => {
     return res.json("TESTING 123");
