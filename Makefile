@@ -95,8 +95,8 @@ deploy:
 	# @make env lint build
 	firebase functions:config:set \
 		config.verbose_log=${VERBOSE_LOG} \
-		config.api_key=${API_KEY}
-		config.bucket_name=${BUCKET_NAME}
+		config.api_key=${API_KEY} \
+		config.bucket_name=${BUCKET_NAME} \
 		config.project_id=${PROJECT_ID}
 
 	firebase deploy --only functions
