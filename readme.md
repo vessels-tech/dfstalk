@@ -9,6 +9,19 @@ We figured that this libary could be very useful for others working in to develo
 
 _TODO: Talk about the relationship between IVR and Financial Inclusion_
 
+
+## Example
+
+DFS Talk is able to convert complicated numbers into audio by stitching together individual audio files.
+
+### English:
+- 2976 with an Australian Male Accent [link](./docs/audio/en_AU_male_2976.mp3)
+- 576 with an Australian Male Accent [link](./docs/audio/en_AU_male_577.mp3)
+
+### Swahili:
+_(coming soon!)_
+
+
 ## [API](https://vessels-tech.github.io/dfstalk/docs/index.html)
 
 _This is a draft api, and is currently under review before wider implementation_
@@ -51,7 +64,6 @@ curl -X POST "https://us-central1-dfs-talk.cloudfunctions.net/number/" \
 We have a live deployment that is currently in private Alpha testing, and not yet ready for the public. To request access, get in touch with us at: lewis [at] vesselstech [dot] com.
 
 
-
 ## Adding a new Language
 
 If you would like to contribute a new language or audio for a given language, please get in touch with us at: lewis [at] vesselstech [dot] com.
@@ -64,7 +76,9 @@ The process will change for each language, but follow these rough steps:
 
 ## License
 
-DFSTalk is licensed under a GNU GPL v3.0 license.
+DFSTalk is licensed under a GNU GPL v3.0 license. See the LICENSE file for more info.
+
+Copyright (c) 2019 Vessels Tech
 
 ## Contributors
 
