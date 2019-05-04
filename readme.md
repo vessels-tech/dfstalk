@@ -145,5 +145,5 @@ Copyright (c) 2019 Vessels Tech
 
 All of this work is made possible with generous funding from [DFSLab](https://dfslab.net/), a Funtech incubator backed by the Bill and Melinda Gates Foundation.
 
-![dfs_tech](./docs/img/dfs.svg)
+![dfs logo](./docs/img/dfs_logo.jpg | width=100)
 
