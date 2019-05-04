@@ -64,7 +64,7 @@ The process will change for each language, but follow these rough steps:
 
 ## License
 
-DFSTalk is licensed under 
+DFSTalk is licensed under a GNU GPL v3.0 license.
 
 ## Contributors
 
