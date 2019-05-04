@@ -73,7 +73,7 @@ Below is a summary of the key endpoints to use the library. You can browse the f
 Generates audio for a given number and language code.
 
 Request Format:
-```json
+```js
 {
   "language": "<supported language code>",
   "number": integer
@@ -82,10 +82,10 @@ Request Format:
 
 Response Format:
 
-```json
+```js
 {
-  "expiry": <time in seconds>,
-  "url": <url of the generated audio. Will be deleted after the expiry time>
+  "expiry": "" //<time in seconds>,
+  "url": ""    //<url of the generated audio. Will be deleted after the expiry time>
 }
 ```
 
@@ -139,4 +139,11 @@ Copyright (c) 2019 Vessels Tech
 - [Jumo](https://www.jumo.world/)
 - [Teller](https://textteller.com)
 - [Ker-twang](http://ker-twang.com/)
+
+
+## Funders
+
+All of this work is made possible with generous funding from [DFSLab](https://dfslab.net/), a Funtech incubator backed by the Bill and Melinda Gates Foundation.
+
+![dfs_tech](./docs/img/dfs.svg)
 
