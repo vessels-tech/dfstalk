@@ -17,8 +17,8 @@ DFS Talk is able to convert complicated numbers into audio by stitching together
 Below are some examples of numbers that have been converted to audio:
 
 ### English:
-- 2976 with an Australian Male Accent [link](./docs/audio/en_AU_male_2976.mp3)
-- 576 with an Australian Male Accent [link](./docs/audio/en_AU_male_577.mp3)
+- [2976 with an Australian Male Accent.](./docs/audio/en_AU_male_2976.mp3?raw=true)
+- [576 with an Australian Male Accent](./docs/audio/en_AU_male_577.mp3?raw=true)
 
 ### Swahili:
 _(coming soon!)_
