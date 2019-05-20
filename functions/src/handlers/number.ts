@@ -16,7 +16,6 @@ import { rateLimit } from '../middleware/RateLimit';
 const bodyParser = require('body-parser');
 require('express-async-errors');
 
-
 module.exports = (functions: any) => {
   const app = express();
   app.use(bodyParser.json());
