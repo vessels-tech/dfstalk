@@ -91,7 +91,7 @@ describe('NumberBuilder Unit Tests', function() {
   });
 
   describe('sw_TZ_male', function () {
-    it.only('correctly formats numbers 0 < n < 1,000', async () => {
+    it('correctly formats numbers 0 < n < 1,000', async () => {
       //Arrange
       const input = [
         0,
@@ -135,26 +135,35 @@ describe('NumberBuilder Unit Tests', function() {
       assert.deepStrictEqual(results, expected);
     });
 
-    it('formats numbers for 1,000 <= n < 1,000,000', async () => {
+    it.only('formats numbers for 1,000 <= n < 1,000,000', async () => {
       //Arrange
       const input = [
-        8437,
-        10398,
+        1000,
+
+        // 10398
         // 111300,
         // 12840,
         // 1409,
         // 111111,
       ]
       const expected = [
+        //elfu
+        //literally: thousand
+        ['elfu'],
+
+
         // ['eight', 'thousand', 'four', 'hundred', 'thirty', 'seven'],
 
         //elfu nane na mia nne thelathini saba
         //literally: thousand, eight, hundred, four, thirty, seven
-        ['elfu', 'nane', 'mia', 'nne', 'thelathini', 'saba'],
+        // ['elfu', 'nane', 'mia', 'nne', 'thelathini', 'saba'],
 
         //
         //literally: thousand, ten, three, ninety, eight
-        ['elfu', 'kumi', 'tatu', 'tisini', 'nane'],
+        // ['elfu', 'kumi', 'tatu', 'tisini', 'nane'],
+
+
+
         // ['one', 'hundred', 'eleven', 'thousand', 'three', 'hundred'],
         // ['twelve', 'thousand', 'eight', 'hundred', 'forty'],
         // ['one', 'thousand', 'four', 'hundred', 'nine'],
