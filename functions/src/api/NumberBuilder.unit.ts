@@ -99,13 +99,29 @@ describe('NumberBuilder Unit Tests', function() {
         234,
         19,
         590,
+        110,
       ]
       const expected = [
-        ['zero'],
-        ['one'],
-        ['two', 'hundred', 'thirty', 'four'],
-        ['nineteen'],
-        ['five', 'hundred', 'ninety']
+        ['sifuri'],
+        
+        ['moja'],
+
+        // mia mbili thelathini na nne TODO: figure out na's
+        // literally: hundred, three, thirty, four
+        ['mia', 'mbili', 'thelathini', 'na', 'nne'],
+
+        //kumi na tisa
+        //literally: ten, nine
+        ['kumi', 'na', 'tisa'],
+
+
+        //mia tano tisini
+        //literally: hundred, five, and ninety
+        ['mia', 'tano', 'tisini'],
+
+        //mia moja kumi
+        //literally: hundred, one, ten
+        ['mia', 'moja', 'kumi'],
       ];
 
       //Act
@@ -124,24 +140,31 @@ describe('NumberBuilder Unit Tests', function() {
       const input = [
         8437,
         10398,
-        111300,
-        12840,
-        1409,
-        111111,
+        // 111300,
+        // 12840,
+        // 1409,
+        // 111111,
       ]
       const expected = [
-        ['eight', 'thousand', 'four', 'hundred', 'thirty', 'seven'],
-        ['ten', 'thousand', 'three', 'hundred', 'ninety', 'eight'],
-        ['one', 'hundred', 'eleven', 'thousand', 'three', 'hundred'],
-        ['twelve', 'thousand', 'eight', 'hundred', 'forty'],
-        ['one', 'thousand', 'four', 'hundred', 'nine'],
-        ['one', 'hundred', 'eleven', 'thousand', 'one', 'hundred', 'eleven'],
+        // ['eight', 'thousand', 'four', 'hundred', 'thirty', 'seven'],
+
+        //elfu nane na mia nne thelathini saba
+        //literally: thousand, eight, hundred, four, thirty, seven
+        ['elfu', 'nane', 'mia', 'nne', 'thelathini', 'saba'],
+
+        //
+        //literally: thousand, ten, three, ninety, eight
+        ['elfu', 'kumi', 'tatu', 'tisini', 'nane'],
+        // ['one', 'hundred', 'eleven', 'thousand', 'three', 'hundred'],
+        // ['twelve', 'thousand', 'eight', 'hundred', 'forty'],
+        // ['one', 'thousand', 'four', 'hundred', 'nine'],
+        // ['one', 'hundred', 'eleven', 'thousand', 'one', 'hundred', 'eleven'],
       ];
 
       //Act
       const results: string[][] = [];
       await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'en_AU_male'))
+        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'sw_TZ_male'))
         results.push(result);
       });
 
@@ -161,7 +184,7 @@ describe('NumberBuilder Unit Tests', function() {
       //Act
       const results: string[][] = [];
       await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'en_AU_male'))
+        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'sw_TZ_male'))
         results.push(result);
       });
 

@@ -1,4 +1,120 @@
 import { isNullOrUndefined } from "util";
+import { getNextAndLastDigit } from "../utils/NumberUtils";
+
+
+/**
+ * Better implementation of fileForNumberAndPlace
+ * 
+ * Reference for Swahili: https://www.reddit.com/r/swahili/comments/22cc5f/numbers_in_swahilixpost_from_rlearnswahili/
+ * 
+ * 
+ * @param digit 
+ * @param place 
+ * @param originalNumber 
+ */
+const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber: number): string[] => {
+  const {nextDigit, lastDigit} = getNextAndLastDigit(originalNumber, place);
+
+  if (place === 0) {
+    const root = [];
+    //In Swahili, na is always added between tens and unit digits. 
+    if (!isNullOrUndefined(nextDigit)) {
+      root.push('na');
+    }
+
+    switch (digit) {
+      
+      case 0: {
+        if (isNullOrUndefined(nextDigit) && isNullOrUndefined(lastDigit)) {
+          return ['sifuri'];
+        }
+
+        return [];
+      }
+      case 1: root.push('moja'); break;
+      case 2: root.push('mbili'); break;
+      case 3: root.push('tatu'); break;
+      case 4: root.push('nne'); break;
+      case 5: root.push('tano'); break;
+      case 6: root.push('sita'); break;
+      case 7: root.push('saba'); break;
+      case 8: root.push('nane'); break;
+      case 9: root.push('tisa'); break;
+    }
+
+    return root;
+  }
+
+  //TODO: how do we add the na?
+
+  //no teens in Swahili
+  if (place === 1) {
+    // const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
+    const root = [];
+    switch (digit) {
+      case 1: root.push('kumi'); break;
+      case 2: root.push('ishirini'); break;
+      case 3: root.push('thelathini'); break;
+      case 4: root.push('arobaini'); break;
+      case 5: root.push('hamsini'); break;
+      case 6: root.push('sitini'); break;
+      case 7: root.push('sabini'); break;
+      case 8: root.push('themanini'); break;
+      case 9: root.push('tisini'); break;
+    }
+
+    return root;
+  }
+
+  if (place === 2) {
+    //Hundreds, recurse! - ignore the next digit as it isn't relevent to hundreds
+    let root = [];
+    root.push('mia');
+    // root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, originalNumber));
+    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber/100)));
+    return root;
+  }
+
+  if (place === 3) {
+    //Thousands, recurse!
+    let root = [];
+    root.push('elfu');
+    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, originalNumber));
+    return root;
+  }
+
+  if (place === 4) {
+    //Ten Thousands, just use the tens
+    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
+    return root;
+  }
+
+  if (place === 5) {
+    //Hundred Thousands, just use the hundreds
+    const root = V1_1_fileForNumberAndPlace(digit, 2, originalNumber);
+    return root;
+  }
+
+  if (place === 6) {
+    //Millions,
+    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
+
+    root.push('million');
+    return root;
+  }
+
+  if (place === 7) {
+    //10-millions,
+    const root = V1_1_fileForNumberAndPlace(digit, 1, originalNumber);
+
+    return root;
+  }
+
+  return [];
+
+
+}
+
 
 /**
  * TODO: rename
@@ -16,103 +132,12 @@ import { isNullOrUndefined } from "util";
  */
 
 
-const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number, nextDigit?: number): string[] => {
-  if (place === 0) {
-
-    //If this is the second number in a teen, don't return anything
-    if (nextDigit === 1) {
-      return [];
-    }
-
-    switch (digit) {
-      case 0: {
-        if (isNullOrUndefined(nextDigit) && isNullOrUndefined(lastDigit)) {
-          return ['zero'];
-        }
-
-        return [];
-      }
-      case 1: return ['one'];
-      case 2: return ['two'];
-      case 3: return ['three'];
-      case 4: return ['four'];
-      case 5: return ['five'];
-      case 6: return ['six'];
-      case 7: return ['seven'];
-      case 8: return ['eight'];
-      case 9: return ['nine'];
-    }
+const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number, nextDigit?: number, originalNumber?: number): string[] => {
+  if (isNullOrUndefined(originalNumber)) {
+    throw new Error('Original number is required for V1_1_fileForNumberAndPlace');
   }
 
-  //TODO: this doesn't handle teens properly
-  if (place === 1) {
-    switch (digit) {
-      //Handle Teens by using last number
-      case 1: {
-        switch (lastDigit) {
-          case 0: return ['ten'];
-          case 1: return ['eleven'];
-          case 2: return ['twelve'];
-          case 3: return ['thirtheen'];
-          case 4: return ['fourteen'];
-          case 5: return ['fifteen'];
-          case 6: return ['sixteen'];
-          case 7: return ['seventeen'];
-          case 8: return ['eighteen'];
-          case 9: return ['nineteen'];
-        }
-      }
-      case 2: return ['twenty'];
-      case 3: return ['thirty'];
-      case 4: return ['forty'];
-      case 5: return ['fifty'];
-      case 6: return ['sixty'];
-      case 7: return ['seventy'];
-      case 8: return ['eighty'];
-      case 9: return ['ninety'];
-    }
-  }
-
-  if (place === 2) {
-    //Hundreds, recurse! - ignore the next digit as it isn't relevent to hundreds
-    const root = fileForNumberAndPlace(digit, 0, lastDigit);
-    root.push('hundred');
-    return root;
-  }
-
-  if (place === 3) {
-    //Thousands, recurse!
-    const root = fileForNumberAndPlace(digit, 0, lastDigit, nextDigit);
-    root.push('thousand');
-    return root;
-  }
-
-  if (place === 4) {
-    //Ten Thousands, just use the tens
-    const root = fileForNumberAndPlace(digit, 1, lastDigit, nextDigit);
-    return root;
-  }
-
-  if (place === 5) {
-    //Hundred Thousands, just use the hundreds
-    const root = fileForNumberAndPlace(digit, 2, lastDigit, nextDigit);
-    return root;
-  }
-
-  if (place === 6) {
-    //Millions,
-    const root = fileForNumberAndPlace(digit, 0, lastDigit, nextDigit);
-    root.push('million');
-    return root;
-  }
-
-  if (place === 7) {
-    //10-millions,
-    const root = fileForNumberAndPlace(digit, 1, lastDigit, nextDigit);
-    return root;
-  }
-
-  return [];
+  return V1_1_fileForNumberAndPlace(digit, place, originalNumber);
 }
 
 export default fileForNumberAndPlace;

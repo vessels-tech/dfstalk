@@ -79,12 +79,12 @@ update-local-swagger:
 # Tests
 ##
 test-unit:
-	source ${env_dir}/env.unit.sh && \
+	source ${env_dir}/env_compiled && \
 		cd ${dir}/functions && \
 		yarn run unit
 
 test-service:
-	source ${env_dir}/env.unit.sh && \
+	source ${env_dir}/env_compiled && \
 		cd ${dir}/functions && \
 		yarn run service
 

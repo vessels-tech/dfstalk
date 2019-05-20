@@ -2,7 +2,7 @@ import model1 from './model1';
 import Swahili from './Swahili';
 import { SomeResult, makeSuccess, makeError } from '../utils/AppProviderTypes';
 
-export type NumberBuilderFunctionType = (digit: number, place: number, lastDigit?: number, nextDigit?: number) => string[];
+export type NumberBuilderFunctionType = (digit: number, place: number, lastDigit?: number, nextDigit?: number, originalNumber?: number) => string[];
 
 
 function languageSelector(language: string): SomeResult<NumberBuilderFunctionType> {

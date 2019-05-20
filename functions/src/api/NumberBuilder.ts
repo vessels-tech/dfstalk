@@ -3,6 +3,7 @@ import { makeSuccess, SomeResult, ResultType } from "../utils/AppProviderTypes";
 import {
   languageSelector,
 } from '../models';
+import { splitNumberIntoDigits } from "../utils/NumberUtils";
 
 
 export default class NumberBuilder {
@@ -29,7 +30,7 @@ export default class NumberBuilder {
     const builder = builderResult.result;
 
     //split the numbers by digit places, order lowest place first (1's, 10's, 100's etc)
-    const digitPlaces =  Math.floor(number).toString().split('').reverse().map(s => parseInt(s));
+    const digitPlaces = splitNumberIntoDigits(number);
     const audioFiles: Array<string> = [];
 
     //First naive approach
@@ -42,12 +43,11 @@ export default class NumberBuilder {
         nextDigit = undefined;
       }
       //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
-      const files = builder(d, idx, lastDigit, nextDigit).reverse();
+      const files = builder(d, idx, lastDigit, nextDigit, number).reverse();
 
       files.forEach(f => audioFiles.unshift(f));
       lastDigit = d;
     });
-
 
     return Promise.resolve(makeSuccess<string[]>(audioFiles));
   }
