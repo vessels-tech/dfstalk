@@ -91,7 +91,51 @@ describe('NumberBuilder Unit Tests', function() {
   });
 
   describe('sw_TZ_male', function () {
-    it.only('correctly formats numbers 0 < n < 1,000', async () => {
+    it.only('formats swahili numbers in english', async () => {
+
+      //Arrange
+      const input = [
+        0,
+        1,
+        234,
+        1000,
+        1997,
+        29003,
+        36027,
+        412238,
+        3067883,
+        562495011,
+      ]
+      const expected = [
+        ['zero'],
+        ['one'],
+        ['hundred', 'two', 'thirty', 'and', 'four'],
+        ['thousand', 'one'],
+        ['thousand', 'one', 'hundred', 'nine', 'ninety', 'and', 'seven'],
+        ['twenty', 'and', 'nine', 'thousand', 'and', 'three'],
+        ['thirty', 'and', 'six', 'thousand', 'twenty', 'and', 'seven'],
+        ['hundred', 'four', 'ten', 'and', 'two', 'thousand', 'hundred', 'two', 'thirty', 'and', 'eight'],
+        ['million', 'three', 'sixty', 'and', 'seven', 'thousand', 'hundred', 'eight', 'eighty', 'and', 'three'],
+        ['hundred', 'five', 'sixty', 'and', 'two', 'million', 'hundred', 'four', 'ninety', 'and', 'five', 'thousand', 'ten', 'and', 'one'],
+
+      ];
+
+      //Act
+      const results: string[][] = [];
+      await input.forEach(async n => {
+        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'sw_TZ_male'))
+        results.push(result);
+      });
+
+      //Assert
+      assert.deepStrictEqual(results, expected);
+
+    });
+
+
+
+
+    it.skip('correctly formats numbers 0 < n < 1,000', async () => {
       //Arrange
       const input = [
         0,
@@ -135,7 +179,7 @@ describe('NumberBuilder Unit Tests', function() {
       assert.deepStrictEqual(results, expected);
     });
 
-    it('formats numbers for 1,000 <= n < 1,000,000', async () => {
+    it.skip('formats numbers for 1,000 <= n < 1,000,000', async () => {
       //Arrange
       const input = [
         1000,

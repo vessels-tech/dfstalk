@@ -4,6 +4,7 @@ import {
   languageSelector, NumberBuilderFunctionType,
 } from '../models';
 import { splitNumberIntoDigits, splitByZeros } from "../utils/NumberUtils";
+import newBuildSwahili from "../models/SwahiliNew";
 
 export enum NumberPlaceEnum {
   Zeros = 'Zeros',
@@ -28,48 +29,49 @@ export default class NumberBuilder {
    */
   public static buildNumber(number: number, language: string): Promise<SomeResult<string[]>> {
 
-    const builderResult = languageSelector(language);
-    if (builderResult.type === ResultType.ERROR) {
-      return Promise.resolve(builderResult);
-    }
+    // const builderResult = languageSelector(language);
+    // if (builderResult.type === ResultType.ERROR) {
+    //   return Promise.resolve(builderResult);
+    // }
 
-    const buildFromDigits = (digitPlaces: number[], myBuilder: NumberBuilderFunctionType, place: NumberPlaceEnum): string[] => {
-      const placeAudioFiles: string[] = [];
-      digitPlaces.forEach((d, idx) => {
-        //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
-        const files = myBuilder(d, idx, number, place).reverse();
+    // const buildFromDigits = (digitPlaces: number[], myBuilder: NumberBuilderFunctionType, place: NumberPlaceEnum): string[] => {
+    //   const placeAudioFiles: string[] = [];
+    //   digitPlaces.forEach((d, idx) => {
+    //     //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
+    //     const files = myBuilder(d, idx, number, place).reverse();
 
-        // console.log("appending files", files);
-        files.forEach(f => placeAudioFiles.unshift(f));
-      });
+    //     // console.log("appending files", files);
+    //     files.forEach(f => placeAudioFiles.unshift(f));
+    //   });
 
-      return placeAudioFiles;
-    }
+    //   return placeAudioFiles;
+    // }
 
-    const builder = builderResult.result.builder;
-    const glue = builderResult.result.glue;
+    // const builder = builderResult.result.builder;
+    // const glue = builderResult.result.glue;
 
-    //split the numbers by digit places, order lowest place first (1's, 10's, 100's etc)
+    // //split the numbers by digit places, order lowest place first (1's, 10's, 100's etc)
 
-    //I think  we need a new approach, where we split the number into 000's first:
-    //TODO: fix for english
-    //TODO: generalize better
-    const { millions, thousands, zeros } = splitByZeros(number);
+    // //I think  we need a new approach, where we split the number into 000's first:
+    // //TODO: fix for english
+    // //TODO: generalize better
+    // const { millions, thousands, zeros } = splitByZeros(number);
 
-    const digitPlacesMillions = splitNumberIntoDigits(millions);
-    const digitPlacesThousands = splitNumberIntoDigits(thousands);
-    const digitPlacesZeros = splitNumberIntoDigits(zeros);
+    // const digitPlacesMillions = splitNumberIntoDigits(millions);
+    // const digitPlacesThousands = splitNumberIntoDigits(thousands);
+    // const digitPlacesZeros = splitNumberIntoDigits(zeros);
 
-    const audioFilesMillions = buildFromDigits(digitPlacesMillions, builder, NumberPlaceEnum.Millions);
-    const audioFilesThousands = buildFromDigits(digitPlacesThousands, builder, NumberPlaceEnum.Thousands);
-    const audioFilesZeros = buildFromDigits(digitPlacesZeros, builder, NumberPlaceEnum.Zeros);
+    // const audioFilesMillions = buildFromDigits(digitPlacesMillions, builder, NumberPlaceEnum.Millions);
+    // const audioFilesThousands = buildFromDigits(digitPlacesThousands, builder, NumberPlaceEnum.Thousands);
+    // const audioFilesZeros = buildFromDigits(digitPlacesZeros, builder, NumberPlaceEnum.Zeros);
 
-    // now stitch together the files into one array, with the places:
-    console.log('audioFilesMillions, audioFilesThousands, audioFilesZeros', audioFilesMillions, audioFilesThousands, audioFilesZeros);
+    // // now stitch together the files into one array, with the places:
+    // console.log('audioFilesMillions, audioFilesThousands, audioFilesZeros', audioFilesMillions, audioFilesThousands, audioFilesZeros);
 
     //model.glueNumbers(audioFilesMillions, audioFilesThousands, audioFilesZeros);
     
-    const audioFiles: Array<string> = glue([audioFilesMillions, audioFilesThousands, audioFilesZeros]);
+    // const audioFiles: Array<string> = glue([audioFilesMillions, audioFilesThousands, audioFilesZeros]);
+    const audioFiles: Array<string> = newBuildSwahili(number);
 
     
 
