@@ -1,9 +1,15 @@
 import { makeSuccess, SomeResult, ResultType } from "../utils/AppProviderTypes";
 
 import {
-  languageSelector,
+  languageSelector, NumberBuilderFunctionType,
 } from '../models';
-import { splitNumberIntoDigits } from "../utils/NumberUtils";
+import { splitNumberIntoDigits, splitByZeros } from "../utils/NumberUtils";
+
+export enum NumberPlaceEnum {
+  Zeros = 'Zeros',
+  Thousands = 'Thousands',
+  Millions = 'Millions',
+}
 
 
 export default class NumberBuilder {
@@ -27,27 +33,64 @@ export default class NumberBuilder {
       return Promise.resolve(builderResult);
     }
 
-    const builder = builderResult.result;
+    const buildFromDigits = (digitPlaces: number[], myBuilder: NumberBuilderFunctionType, place: NumberPlaceEnum): string[] => {
+      const placeAudioFiles: string[] = [];
+      digitPlaces.forEach((d, idx) => {
+        //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
+        const files = myBuilder(d, idx, number, place).reverse();
+
+        // console.log("appending files", files);
+        files.forEach(f => placeAudioFiles.unshift(f));
+      });
+
+      return placeAudioFiles;
+    }
+
+    const builder = builderResult.result.builder;
+    const glue = builderResult.result.glue;
 
     //split the numbers by digit places, order lowest place first (1's, 10's, 100's etc)
-    const digitPlaces = splitNumberIntoDigits(number);
-    const audioFiles: Array<string> = [];
+
+    //I think  we need a new approach, where we split the number into 000's first:
+    //TODO: fix for english
+    //TODO: generalize better
+    const { millions, thousands, zeros } = splitByZeros(number);
+
+    const digitPlacesMillions = splitNumberIntoDigits(millions);
+    const digitPlacesThousands = splitNumberIntoDigits(thousands);
+    const digitPlacesZeros = splitNumberIntoDigits(zeros);
+
+    const audioFilesMillions = buildFromDigits(digitPlacesMillions, builder, NumberPlaceEnum.Millions);
+    const audioFilesThousands = buildFromDigits(digitPlacesThousands, builder, NumberPlaceEnum.Thousands);
+    const audioFilesZeros = buildFromDigits(digitPlacesZeros, builder, NumberPlaceEnum.Zeros);
+
+    // now stitch together the files into one array, with the places:
+    console.log('audioFilesMillions, audioFilesThousands, audioFilesZeros', audioFilesMillions, audioFilesThousands, audioFilesZeros);
+
+    //model.glueNumbers(audioFilesMillions, audioFilesThousands, audioFilesZeros);
+    
+    const audioFiles: Array<string> = glue([audioFilesMillions, audioFilesThousands, audioFilesZeros]);
+
+    
+
 
     //First naive approach
-    let lastDigit: number | undefined;
-    let nextDigit: number | undefined;
-    digitPlaces.forEach((d, idx) => {
-      if (idx <= digitPlaces.length - 2) {
-        nextDigit = digitPlaces[idx + 1];
-      } else {
-        nextDigit = undefined;
-      }
-      //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
-      const files = builder(d, idx, lastDigit, nextDigit, number).reverse();
+    // let lastDigit: number | undefined;
+    // let nextDigit: number | undefined;
+    // digitPlaces.forEach((d, idx) => {
+    //   if (idx <= digitPlaces.length - 2) {
+    //     nextDigit = digitPlaces[idx + 1];
+    //   } else {
+    //     nextDigit = undefined;
+    //   }
+    //   //idx tells us where we are in the number. 0 = 1's, 1 = 10's etc.
+    //   const files = builder(d, idx, lastDigit, nextDigit, number).reverse();
 
-      files.forEach(f => audioFiles.unshift(f));
-      lastDigit = d;
-    });
+    //   console.log("appending files", files);
+
+    //   files.forEach(f => audioFiles.unshift(f));
+    //   lastDigit = d;
+    // });
 
     return Promise.resolve(makeSuccess<string[]>(audioFiles));
   }

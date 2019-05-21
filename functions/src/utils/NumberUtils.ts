@@ -1,3 +1,13 @@
+import { isNullOrUndefined } from "util";
+
+
+const getOrDefault = (thing: any, defaultValue: any) => {
+  if (isNullOrUndefined(thing)) {
+    return defaultValue;
+  }
+
+  return thing;
+}
 
 
 /**
@@ -19,8 +29,33 @@ export const splitNumberIntoDigits = (num: number): Array<number> =>
 export const getNextAndLastDigit = (originalNumber: number, place: number): { nextDigit: number | undefined, lastDigit: number | undefined} => {
 
   const digits = splitNumberIntoDigits(originalNumber);
+  
   return {
-    nextDigit: digits[place + 1] || undefined,
-    lastDigit: digits[place - 1] || undefined,
+    nextDigit: getOrDefault(digits[place + 1], undefined),
+    lastDigit: getOrDefault(digits[place - 1], undefined),
   }
+}
+
+
+/**
+ * Split a number up into lots of 100's
+ * 
+ * @example, 19,000 => millions: undefined, thousands: 19, zeros: 0
+ * 
+ * 
+ * @param originalNumber 
+ */
+export const splitByZeros = (originalNumber: number): { zeros: number, thousands: number, millions: number} => {
+  let zeros, thousands, millions;
+
+  const digits = splitNumberIntoDigits(originalNumber);
+  zeros =     getOrDefault(digits[2], 0) * 100 + getOrDefault(digits[1], 0) * 10 + getOrDefault(digits[0], 0); 
+  thousands = getOrDefault(digits[5], 0) * 100 + getOrDefault(digits[4], 0) * 10 + getOrDefault(digits[3], 0); 
+  millions =  getOrDefault(digits[8], 0) * 100 + getOrDefault(digits[7], 0) * 10 + getOrDefault(digits[6], 0); 
+
+  return {
+    zeros,
+    thousands,
+    millions,
+  };
 }

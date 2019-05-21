@@ -1,25 +1,40 @@
 import { isNullOrUndefined } from "util";
-import { getNextAndLastDigit } from "../utils/NumberUtils";
+import { getNextAndLastDigit, splitByZeros } from "../utils/NumberUtils";
+import { NumberPlaceEnum } from "../api/NumberBuilder";
+import { ModelType } from ".";
 
 
 /**
  * Better implementation of fileForNumberAndPlace
  * 
  * Reference for Swahili: https://www.reddit.com/r/swahili/comments/22cc5f/numbers_in_swahilixpost_from_rlearnswahili/
+ * Maybe we can reverse engineer this tool: http://www.bantu-languages.com/cgi-bin/perl/dico/sw_number.cgi
+ * 
+ * todo: I think this approach will need to lump together digits in lots of threes...
  * 
  * 
  * @param digit 
  * @param place 
  * @param originalNumber 
  */
-const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber: number): string[] => {
+const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber: number, group: NumberPlaceEnum): string[] => {
+  console.log(`V1_1_fileForNumberAndPlace, digit: ${digit}, place: ${place}, original: ${originalNumber}`);
+
   const {nextDigit, lastDigit} = getNextAndLastDigit(originalNumber, place);
+
+  console.log("next and last:", nextDigit, lastDigit);
 
   if (place === 0) {
     const root = [];
     //In Swahili, na is always added between tens and unit digits. 
     if (!isNullOrUndefined(nextDigit)) {
-      root.push('na');
+      switch (group) {
+        //This kind of breaks, since the elfu will be added in the wrong place sometimes.
+        case NumberPlaceEnum.Millions: root.push('millioni'); break;
+        case NumberPlaceEnum.Thousands: root.push('elfu'); break;
+        case NumberPlaceEnum.Zeros: root.push('na'); break;
+      }
+
     }
 
     switch (digit) {
@@ -68,10 +83,14 @@ const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber
 
   if (place === 2) {
     //Hundreds, recurse! - ignore the next digit as it isn't relevent to hundreds
-    let root = [];
+    let root: string[] = [];
+    if (digit === 0) {
+      return root;
+    }
+    
     root.push('mia');
     // root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, originalNumber));
-    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber/100)));
+    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber / 100), group));
     return root;
   }
 
@@ -79,25 +98,27 @@ const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber
     //Thousands, recurse!
     let root = [];
     root.push('elfu');
-    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, originalNumber));
+    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber / 1000), group));
     return root;
   }
 
   if (place === 4) {
     //Ten Thousands, just use the tens
-    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
+    let root = [];
+    root.push('kumi');
+    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber), group));
     return root;
   }
 
   if (place === 5) {
     //Hundred Thousands, just use the hundreds
-    const root = V1_1_fileForNumberAndPlace(digit, 2, originalNumber);
+    const root = V1_1_fileForNumberAndPlace(digit, 2, originalNumber, group);
     return root;
   }
 
   if (place === 6) {
     //Millions,
-    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
+    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber, group);
 
     root.push('million');
     return root;
@@ -105,39 +126,52 @@ const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber
 
   if (place === 7) {
     //10-millions,
-    const root = V1_1_fileForNumberAndPlace(digit, 1, originalNumber);
+    const root = V1_1_fileForNumberAndPlace(digit, 1, originalNumber, group);
 
     return root;
   }
 
   return [];
-
-
 }
 
 
 /**
- * TODO: rename
- * TODO: refactor to use whole number for context, and not the lastDigit and nextDigit
- * TODO: refactor into a nicely documented and implemented interface
+ * Combine multiple arrays, for millions, thousands and zeros.
  * 
- * 
- * Convert a given number into a list of audio files specific to language
- * 
- * 
- * @param digit 
- * @param place 
- * @param lastDigit 
- * @param nextDigit 
+ * TODO: generalize for broader numbers
+ * @returns Array<string> - combined arrays
  */
+function glueFiles(filesArrays: Array<Array<string>>): Array<string> {
+  const [audioFilesMillions, audioFilesThousands, audioFilesZeros] = filesArrays;
+  let audioFiles: string[] = [];
 
-
-const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number, nextDigit?: number, originalNumber?: number): string[] => {
-  if (isNullOrUndefined(originalNumber)) {
-    throw new Error('Original number is required for V1_1_fileForNumberAndPlace');
+  if (audioFilesMillions.length > 0) {
+    audioFiles = audioFiles.concat(audioFilesMillions);
+    audioFiles.push('milioni');
   }
 
-  return V1_1_fileForNumberAndPlace(digit, place, originalNumber);
+  if (audioFilesThousands.length > 0) {
+    audioFiles = audioFiles.concat(audioFilesThousands);
+
+    //Don't add the elfu if there is no 000s, this is already taken care of for us
+    //Hmm this doesn't generalize well. We want to glue the elfu in some cases, but not all.
+    //Maybe if there is a `na` present, then we know to add the elfu?
+    // if (audioFilesZeros.length > 0) {
+    //   audioFiles.push('elfu');
+    // }
+  }
+
+  if (audioFilesZeros.length > 0) {
+    audioFiles = audioFiles.concat(audioFilesZeros);
+  }
+
+  return audioFiles;
 }
 
-export default fileForNumberAndPlace;
+
+export default {
+  builder: V1_1_fileForNumberAndPlace,
+  glue: glueFiles,
+}
+
+
