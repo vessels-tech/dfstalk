@@ -5,6 +5,24 @@ import { unsafeUnwrap } from '../utils/AppProviderTypes';
 import assert from 'assert';
 
 
+
+/**
+ * Common Reducer function for running a series of numbers for the same language
+ * 
+ * @param input 
+ * @param language 
+ */
+const getResults = async (input: Array<number>, language: string): Promise<string[][]> => {
+  return input.reduce(async (accP: Promise<string[][]>, curr: number) => {
+    const result: string[] = unsafeUnwrap(await NumberBuilder.buildNumber(curr, language));
+
+    const acc = await accP;
+    acc.push(result);
+
+    return Promise.resolve(acc);
+  }, Promise.resolve([]));
+}
+
 describe('NumberBuilder Unit Tests', function() {
 
   describe('en_AU_male', function () {
@@ -26,11 +44,7 @@ describe('NumberBuilder Unit Tests', function() {
       ];
 
       //Act
-      const results: string[][] = [];
-      await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'en_AU_male'))
-        results.push(result);
-      });
+      const results: string[][] = await getResults(input, 'en_AU_male');
 
       //Assert
       assert.deepStrictEqual(results, expected);
@@ -56,11 +70,7 @@ describe('NumberBuilder Unit Tests', function() {
       ];
 
       //Act
-      const results: string[][] = [];
-      await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'en_AU_male'))
-        results.push(result);
-      });
+      const results: string[][] = await getResults(input, 'en_AU_male');
 
       //Assert
       assert.deepStrictEqual(results, expected);
@@ -76,11 +86,7 @@ describe('NumberBuilder Unit Tests', function() {
       ];
 
       //Act
-      const results: string[][] = [];
-      await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'en_AU_male'))
-        results.push(result);
-      });
+      const results: string[][] = await getResults(input, 'en_AU_male');
 
       //Assert
       assert.deepStrictEqual(results, expected);
@@ -91,8 +97,7 @@ describe('NumberBuilder Unit Tests', function() {
   });
 
   describe('sw_TZ_male', function () {
-    it.only('formats swahili numbers in english', async () => {
-
+    it('formats swahili numbers in english', async () => {
       //Arrange
       const input = [
         0,
@@ -117,22 +122,12 @@ describe('NumberBuilder Unit Tests', function() {
         ['hundred', 'four', 'ten', 'and', 'two', 'thousand', 'hundred', 'two', 'thirty', 'and', 'eight'],
         ['million', 'three', 'sixty', 'and', 'seven', 'thousand', 'hundred', 'eight', 'eighty', 'and', 'three'],
         ['hundred', 'five', 'sixty', 'and', 'two', 'million', 'hundred', 'four', 'ninety', 'and', 'five', 'thousand', 'ten', 'and', 'one'],
-
       ];
 
-      //Act
-      const results: string[][] = [];
-      await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'sw_TZ_male'))
-        results.push(result);
-      });
-
+      const results = await getResults(input, 'sw_TZ_male');
       //Assert
       assert.deepStrictEqual(results, expected);
-
     });
-
-
 
 
     it.skip('correctly formats numbers 0 < n < 1,000', async () => {
@@ -222,26 +217,6 @@ describe('NumberBuilder Unit Tests', function() {
         // ['twelve', 'thousand', 'eight', 'hundred', 'forty'],
         // ['one', 'thousand', 'four', 'hundred', 'nine'],
         // ['one', 'hundred', 'eleven', 'thousand', 'one', 'hundred', 'eleven'],
-      ];
-
-      //Act
-      const results: string[][] = [];
-      await input.forEach(async n => {
-        const result = unsafeUnwrap(await NumberBuilder.buildNumber(n, 'sw_TZ_male'))
-        results.push(result);
-      });
-
-      //Assert
-      assert.deepStrictEqual(results, expected);
-    });
-
-    it('formats numbers for 1,000 <= n < 1,000,000', async () => {
-      //Arrange
-      const input = [
-        12837419
-      ]
-      const expected = [
-        ['twelve', 'million', 'eight', 'hundred', 'thirty', 'seven', 'thousand', 'four', 'hundred', 'nineteen'],
       ];
 
       //Act
