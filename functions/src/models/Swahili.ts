@@ -15,19 +15,19 @@ function numberBuilder(num: number): Array<string> {
     case undefined: return audioFiles;
     case 0: {
       if (isNullOrUndefined(tens)) {
-        audioFiles.push('zero');
+        audioFiles.push('sifuri');
       }
       break;
     }
-    case 1: audioFiles.unshift('one'); break;
-    case 2: audioFiles.unshift('two') ; break;
-    case 3: audioFiles.unshift('three'); break;
-    case 4: audioFiles.unshift('four'); break;
-    case 5: audioFiles.unshift('five'); break;
-    case 6: audioFiles.unshift('six'); break;
-    case 7: audioFiles.unshift('seven'); break;
-    case 8: audioFiles.unshift('eight'); break;
-    case 9: audioFiles.unshift('nine'); break;
+    case 1: audioFiles.unshift('moja'); break;
+    case 2: audioFiles.unshift('mbili') ; break;
+    case 3: audioFiles.unshift('tatu'); break;
+    case 4: audioFiles.unshift('nne'); break;
+    case 5: audioFiles.unshift('tano'); break;
+    case 6: audioFiles.unshift('sita'); break;
+    case 7: audioFiles.unshift('saba'); break;
+    case 8: audioFiles.unshift('nane'); break;
+    case 9: audioFiles.unshift('tisa'); break;
   }
 
   /* Tens */
@@ -36,20 +36,20 @@ function numberBuilder(num: number): Array<string> {
   } 
 
   if (ones > 0) {
-    audioFiles.unshift('and');
+    audioFiles.unshift('na');
   }
 
   switch (tens) {
     case 0: break;
-    case 1: audioFiles.unshift('ten'); break;
-    case 2: audioFiles.unshift('twenty'); break;
-    case 3: audioFiles.unshift('thirty'); break;
-    case 4: audioFiles.unshift('forty'); break;
-    case 5: audioFiles.unshift('fifty'); break;
-    case 6: audioFiles.unshift('sixty'); break;
-    case 7: audioFiles.unshift('seventy'); break;
-    case 8: audioFiles.unshift('eighty'); break;
-    case 9: audioFiles.unshift('ninety'); break;
+    case 1: audioFiles.unshift('kumi'); break;
+    case 2: audioFiles.unshift('ishirini'); break;
+    case 3: audioFiles.unshift('thelathini'); break;
+    case 4: audioFiles.unshift('arobaini'); break;
+    case 5: audioFiles.unshift('hamsini'); break;
+    case 6: audioFiles.unshift('sitini'); break;
+    case 7: audioFiles.unshift('sabini'); break;
+    case 8: audioFiles.unshift('themanini'); break;
+    case 9: audioFiles.unshift('tisini'); break;
   }
   
   /* Hundreds */
@@ -60,15 +60,15 @@ function numberBuilder(num: number): Array<string> {
 
   switch (hundreds) {
     case 0: break;
-    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
-    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
-    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
-    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
-    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
-    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
-    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
-    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
-    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
+    case 1: audioFiles.unshift('moja');  audioFiles.unshift('mia'); break;
+    case 2: audioFiles.unshift('mbili'); audioFiles.unshift('mia'); break;
+    case 3: audioFiles.unshift('tatu');  audioFiles.unshift('mia'); break;
+    case 4: audioFiles.unshift('nne');   audioFiles.unshift('mia'); break;
+    case 5: audioFiles.unshift('tano');  audioFiles.unshift('mia'); break;
+    case 6: audioFiles.unshift('sita');  audioFiles.unshift('mia'); break;
+    case 7: audioFiles.unshift('saba');  audioFiles.unshift('mia'); break;
+    case 8: audioFiles.unshift('nane');  audioFiles.unshift('mia'); break;
+    case 9: audioFiles.unshift('tisa');  audioFiles.unshift('mia'); break;
   }
   
   /* Thousands */
@@ -78,29 +78,29 @@ function numberBuilder(num: number): Array<string> {
   if (!isNullOrUndefined(tenThousands)) {
     switch (thousands) {
       case 0: break;
-      case 1: audioFiles.unshift('thousand'); audioFiles.unshift('one');   break;
-      case 2: audioFiles.unshift('thousand'); audioFiles.unshift('two');   break;
-      case 3: audioFiles.unshift('thousand'); audioFiles.unshift('three'); break;
-      case 4: audioFiles.unshift('thousand'); audioFiles.unshift('four');  break;
-      case 5: audioFiles.unshift('thousand'); audioFiles.unshift('five');  break;
-      case 6: audioFiles.unshift('thousand'); audioFiles.unshift('six');   break;
-      case 7: audioFiles.unshift('thousand'); audioFiles.unshift('seven'); break;
-      case 8: audioFiles.unshift('thousand'); audioFiles.unshift('eight'); break;
-      case 9: audioFiles.unshift('thousand'); audioFiles.unshift('nine');  break;
+      case 1: audioFiles.unshift('elfu'); audioFiles.unshift('moja');   break;
+      case 2: audioFiles.unshift('elfu'); audioFiles.unshift('mbili');   break;
+      case 3: audioFiles.unshift('elfu'); audioFiles.unshift('tatu'); break;
+      case 4: audioFiles.unshift('elfu'); audioFiles.unshift('nne');  break;
+      case 5: audioFiles.unshift('elfu'); audioFiles.unshift('tano');  break;
+      case 6: audioFiles.unshift('elfu'); audioFiles.unshift('sita');   break;
+      case 7: audioFiles.unshift('elfu'); audioFiles.unshift('saba'); break;
+      case 8: audioFiles.unshift('elfu'); audioFiles.unshift('nane'); break;
+      case 9: audioFiles.unshift('elfu'); audioFiles.unshift('tisa');  break;
     }
   } else {
     //No nextDigit
     switch (thousands) {
       case 0: break;
-      case 1: audioFiles.unshift('one'); audioFiles.unshift('thousand'); break;
-      case 2: audioFiles.unshift('two'); audioFiles.unshift('thousand'); break;
-      case 3: audioFiles.unshift('three'); audioFiles.unshift('thousand'); break;
-      case 4: audioFiles.unshift('four'); audioFiles.unshift('thousand'); break;
-      case 5: audioFiles.unshift('five'); audioFiles.unshift('thousand'); break;
-      case 6: audioFiles.unshift('six'); audioFiles.unshift('thousand'); break;
-      case 7: audioFiles.unshift('seven'); audioFiles.unshift('thousand'); break;
-      case 8: audioFiles.unshift('eight'); audioFiles.unshift('thousand'); break;
-      case 9: audioFiles.unshift('nine'); audioFiles.unshift('thousand'); break;
+      case 1: audioFiles.unshift('moja');  audioFiles.unshift('elfu'); break;
+      case 2: audioFiles.unshift('mbili'); audioFiles.unshift('elfu'); break;
+      case 3: audioFiles.unshift('tatu');  audioFiles.unshift('elfu'); break;
+      case 4: audioFiles.unshift('nne');   audioFiles.unshift('elfu'); break;
+      case 5: audioFiles.unshift('tano');  audioFiles.unshift('elfu'); break;
+      case 6: audioFiles.unshift('sita');  audioFiles.unshift('elfu'); break;
+      case 7: audioFiles.unshift('saba');  audioFiles.unshift('elfu'); break;
+      case 8: audioFiles.unshift('nane');  audioFiles.unshift('elfu'); break;
+      case 9: audioFiles.unshift('tisa');  audioFiles.unshift('elfu'); break;
     }
   }
 
@@ -110,20 +110,20 @@ function numberBuilder(num: number): Array<string> {
   }
 
   if (thousands > 0) {
-    audioFiles.unshift('and');
+    audioFiles.unshift('na');
   }
 
   switch (tenThousands) {
     case 0: break;
-    case 1: audioFiles.unshift('ten'); break;
-    case 2: audioFiles.unshift('twenty'); break;
-    case 3: audioFiles.unshift('thirty'); break;
-    case 4: audioFiles.unshift('forty'); break;
-    case 5: audioFiles.unshift('fifty'); break;
-    case 6: audioFiles.unshift('sixty'); break;
-    case 7: audioFiles.unshift('seventy'); break;
-    case 8: audioFiles.unshift('eighty'); break;
-    case 9: audioFiles.unshift('ninety'); break;
+    case 1: audioFiles.unshift('kumi'); break;
+    case 2: audioFiles.unshift('ishirini'); break;
+    case 3: audioFiles.unshift('thelathini'); break;
+    case 4: audioFiles.unshift('arobaini'); break;
+    case 5: audioFiles.unshift('hamsini'); break;
+    case 6: audioFiles.unshift('sitini'); break;
+    case 7: audioFiles.unshift('sabini'); break;
+    case 8: audioFiles.unshift('themanini'); break;
+    case 9: audioFiles.unshift('tisini'); break;
   }
 
   /* Hundred thousands */
@@ -134,15 +134,15 @@ function numberBuilder(num: number): Array<string> {
 
   switch (hundredThousands) {
     case 0: break;
-    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
-    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
-    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
-    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
-    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
-    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
-    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
-    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
-    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
+    case 1: audioFiles.unshift('moja');  audioFiles.unshift('mia'); break;
+    case 2: audioFiles.unshift('mbili'); audioFiles.unshift('mia'); break;
+    case 3: audioFiles.unshift('tatu');  audioFiles.unshift('mia'); break;
+    case 4: audioFiles.unshift('nne');   audioFiles.unshift('mia'); break;
+    case 5: audioFiles.unshift('tano');  audioFiles.unshift('mia'); break;
+    case 6: audioFiles.unshift('sita');  audioFiles.unshift('mia'); break;
+    case 7: audioFiles.unshift('saba');  audioFiles.unshift('mia'); break;
+    case 8: audioFiles.unshift('nane');  audioFiles.unshift('mia'); break;
+    case 9: audioFiles.unshift('tisa');  audioFiles.unshift('mia'); break;
   }
 
   /* Millions */
@@ -152,30 +152,30 @@ function numberBuilder(num: number): Array<string> {
   if (!isNullOrUndefined(tenMillions)) {
     switch (millions) {
       case 0: break;
-      case 1: audioFiles.unshift ('million'); audioFiles.unshift('one');   break;
-      case 2: audioFiles.unshift ('million'); audioFiles.unshift('two');   break;
-      case 3: audioFiles.unshift ('million'); audioFiles.unshift('three'); break;
-      case 4: audioFiles.unshift ('million'); audioFiles.unshift('four');  break;
-      case 5: audioFiles.unshift ('million'); audioFiles.unshift('five');  break;
-      case 6: audioFiles.unshift ('million'); audioFiles.unshift('six');   break;
-      case 7: audioFiles.unshift ('million'); audioFiles.unshift('seven'); break;
-      case 8: audioFiles.unshift ('million'); audioFiles.unshift('eight'); break;
-      case 9: audioFiles.unshift ('million'); audioFiles.unshift('nine');  break;
+      case 1: audioFiles.unshift('millioni'); audioFiles.unshift('moja');   break;
+      case 2: audioFiles.unshift('millioni'); audioFiles.unshift('mbili');   break;
+      case 3: audioFiles.unshift('millioni'); audioFiles.unshift('tatu'); break;
+      case 4: audioFiles.unshift('millioni'); audioFiles.unshift('nne');  break;
+      case 5: audioFiles.unshift('millioni'); audioFiles.unshift('tano');  break;
+      case 6: audioFiles.unshift('millioni'); audioFiles.unshift('sita');   break;
+      case 7: audioFiles.unshift('millioni'); audioFiles.unshift('saba'); break;
+      case 8: audioFiles.unshift('millioni'); audioFiles.unshift('nane'); break;
+      case 9: audioFiles.unshift('millioni'); audioFiles.unshift('tisa');  break;
     }
   } else {
     //No nextDigit
     switch (millions) {
       case 0: break;
-      case 1: audioFiles.unshift('one'); audioFiles.unshift('million'); break;
-      case 2: audioFiles.unshift('two'); audioFiles.unshift('million'); break;
-      case 3: audioFiles.unshift('three'); audioFiles.unshift('million'); break;
-      case 4: audioFiles.unshift('four'); audioFiles.unshift('million'); break;
-      case 5: audioFiles.unshift('five'); audioFiles.unshift('million'); break;
-      case 6: audioFiles.unshift('six'); audioFiles.unshift('million'); break;
-      case 7: audioFiles.unshift('seven'); audioFiles.unshift('million'); break;
-      case 8: audioFiles.unshift('eight'); audioFiles.unshift('million'); break;
-      case 9: audioFiles.unshift('nine'); audioFiles.unshift('million'); break;
-    }
+      case 1: audioFiles.unshift('moja');  audioFiles.unshift('millioni'); break;
+      case 2: audioFiles.unshift('mbili'); audioFiles.unshift('millioni'); break;
+      case 3: audioFiles.unshift('tatu');  audioFiles.unshift('millioni'); break;
+      case 4: audioFiles.unshift('nne');   audioFiles.unshift('millioni'); break;
+      case 5: audioFiles.unshift('tano');  audioFiles.unshift('millioni'); break;
+      case 6: audioFiles.unshift('sita');  audioFiles.unshift('millioni'); break;
+      case 7: audioFiles.unshift('saba');  audioFiles.unshift('millioni'); break;
+      case 8: audioFiles.unshift('nane');  audioFiles.unshift('millioni'); break;
+      case 9: audioFiles.unshift('tisa');  audioFiles.unshift('millioni'); break;
+    } 
   }
 
   /* Ten Millions */
@@ -184,7 +184,7 @@ function numberBuilder(num: number): Array<string> {
   }
 
   if (millions > 0) {
-    audioFiles.unshift('and');
+    audioFiles.unshift('na');
   }
 
   switch (tenMillions) {
@@ -208,15 +208,15 @@ function numberBuilder(num: number): Array<string> {
 
   switch (hundredMillion) {
     case 0: break;
-    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
-    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
-    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
-    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
-    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
-    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
-    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
-    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
-    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
+    case 1: audioFiles.unshift('moja');  audioFiles.unshift('mia'); break;
+    case 2: audioFiles.unshift('mbili'); audioFiles.unshift('mia'); break;
+    case 3: audioFiles.unshift('tatu');  audioFiles.unshift('mia'); break;
+    case 4: audioFiles.unshift('nne');   audioFiles.unshift('mia'); break;
+    case 5: audioFiles.unshift('tano');  audioFiles.unshift('mia'); break;
+    case 6: audioFiles.unshift('sita');  audioFiles.unshift('mia'); break;
+    case 7: audioFiles.unshift('saba');  audioFiles.unshift('mia'); break;
+    case 8: audioFiles.unshift('nane');  audioFiles.unshift('mia'); break;
+    case 9: audioFiles.unshift('tisa');  audioFiles.unshift('mia'); break;
   }
 
   return audioFiles;
