@@ -96,7 +96,7 @@ describe('NumberBuilder Unit Tests', function() {
     it('formats numbers with decimals')
   });
 
-  describe('sw_TZ_male', function () {
+  describe('sw_TZ_male_english', function () {
     it('formats swahili numbers in english', async () => {
       //Arrange
       const input = [
@@ -233,5 +233,42 @@ describe('NumberBuilder Unit Tests', function() {
     it('formats negative numbers')
     it('formats numbers with decimals')
 
+  });
+
+  describe('sw_TZ_male', function () {
+    it('formats swahili numbers correctly', async () => {
+      //Arrange
+      const input = [
+        0,
+        1,
+        234,
+        1000,
+        1997,
+        29003,
+        36027,
+        412238,
+        3067883,
+        562495011,
+      ]
+      const expected = [
+        ['sifuri'],
+        ['moja'],
+        ['mia', 'mbili', 'thelathini', 'na', 'nne'],
+        ['elfu', 'moja'],
+        ['elfu', 'moja', 'mia', 'tisa', 'tisini', 'na', 'saba'],
+        ['ishirini', 'na', 'tisa', 'elfu', 'na', 'tatu'],
+        ['thelathini', 'na', 'sita', 'elfu', 'ishirini', 'na', 'saba'],
+        ['mia', 'nne', 'kumi', 'na', 'mbili', 'elfu', 'mia', 'mbili', 'thelathini', 'na', 'nane'],
+        ['millioni', 'tatu', 'sitini', 'na', 'saba', 'elfu', 'mia', 'nane', 'themanini', 'na', 'tatu'],
+        ['mia', 'tano', 'sitini', 'na', 'mbili', 'millioni', 'mia', 'nne', 'tisini', 'na', 'tano', 'elfu', 'kumi', 'na', 'moja'],
+      ];
+
+      const results = await getResults(input, 'sw_TZ_male');
+      //Assert
+      assert.deepStrictEqual(results, expected);
+    });
+
+    it('formats negative numbers')
+    it('formats numbers with decimals')
   });
 });
