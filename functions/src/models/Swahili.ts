@@ -1,177 +1,227 @@
+import { splitNumberIntoDigits } from "../utils/NumberUtils";
 import { isNullOrUndefined } from "util";
-import { getNextAndLastDigit, splitByZeros } from "../utils/NumberUtils";
-import { NumberPlaceEnum } from "../api/NumberBuilder";
-import { ModelType } from ".";
 
 
-/**
- * Better implementation of fileForNumberAndPlace
- * 
- * Reference for Swahili: https://www.reddit.com/r/swahili/comments/22cc5f/numbers_in_swahilixpost_from_rlearnswahili/
- * Maybe we can reverse engineer this tool: http://www.bantu-languages.com/cgi-bin/perl/dico/sw_number.cgi
- * 
- * todo: I think this approach will need to lump together digits in lots of threes...
- * 
- * 
- * @param digit 
- * @param place 
- * @param originalNumber 
- */
-const V1_1_fileForNumberAndPlace = (digit: number, place: number, originalNumber: number, group: NumberPlaceEnum): string[] => {
-  console.log(`V1_1_fileForNumberAndPlace, digit: ${digit}, place: ${place}, original: ${originalNumber}`);
+function numberBuilder(num: number): Array<string> {
+  const digits = splitNumberIntoDigits(num);
+  const audioFiles: Array<string> = [];
 
-  const {nextDigit, lastDigit} = getNextAndLastDigit(originalNumber, place);
+  /* Ones */
+  const ones = digits[0];
+  //lookahead
+  const tens = digits[1];
 
-  console.log("next and last:", nextDigit, lastDigit);
-
-  if (place === 0) {
-    const root = [];
-    //In Swahili, na is always added between tens and unit digits. 
-    if (!isNullOrUndefined(nextDigit)) {
-      switch (group) {
-        //This kind of breaks, since the elfu will be added in the wrong place sometimes.
-        case NumberPlaceEnum.Millions: root.push('millioni'); break;
-        case NumberPlaceEnum.Thousands: root.push('elfu'); break;
-        case NumberPlaceEnum.Zeros: root.push('na'); break;
+  switch (ones) {
+    case undefined: return audioFiles;
+    case 0: {
+      if (isNullOrUndefined(tens)) {
+        audioFiles.push('zero');
       }
-
+      break;
     }
+    case 1: audioFiles.unshift('one'); break;
+    case 2: audioFiles.unshift('two') ; break;
+    case 3: audioFiles.unshift('three'); break;
+    case 4: audioFiles.unshift('four'); break;
+    case 5: audioFiles.unshift('five'); break;
+    case 6: audioFiles.unshift('six'); break;
+    case 7: audioFiles.unshift('seven'); break;
+    case 8: audioFiles.unshift('eight'); break;
+    case 9: audioFiles.unshift('nine'); break;
+  }
 
-    switch (digit) {
-      
-      case 0: {
-        if (isNullOrUndefined(nextDigit) && isNullOrUndefined(lastDigit)) {
-          return ['sifuri'];
-        }
+  /* Tens */
+  if (isNullOrUndefined(tens)) {
+    return audioFiles;
+  } 
 
-        return [];
-      }
-      case 1: root.push('moja'); break;
-      case 2: root.push('mbili'); break;
-      case 3: root.push('tatu'); break;
-      case 4: root.push('nne'); break;
-      case 5: root.push('tano'); break;
-      case 6: root.push('sita'); break;
-      case 7: root.push('saba'); break;
-      case 8: root.push('nane'); break;
-      case 9: root.push('tisa'); break;
+  if (ones > 0) {
+    audioFiles.unshift('and');
+  }
+
+  switch (tens) {
+    case 0: break;
+    case 1: audioFiles.unshift('ten'); break;
+    case 2: audioFiles.unshift('twenty'); break;
+    case 3: audioFiles.unshift('thirty'); break;
+    case 4: audioFiles.unshift('forty'); break;
+    case 5: audioFiles.unshift('fifty'); break;
+    case 6: audioFiles.unshift('sixty'); break;
+    case 7: audioFiles.unshift('seventy'); break;
+    case 8: audioFiles.unshift('eighty'); break;
+    case 9: audioFiles.unshift('ninety'); break;
+  }
+  
+  /* Hundreds */
+  const hundreds = digits[2];
+  if (isNullOrUndefined(hundreds)) {
+    return audioFiles;
+  }
+
+  switch (hundreds) {
+    case 0: break;
+    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
+    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
+    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
+    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
+    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
+    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
+    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
+    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
+    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
+  }
+  
+  /* Thousands */
+  const thousands = digits[3];
+  //lookahead
+  const tenThousands = digits[4];
+  if (!isNullOrUndefined(tenThousands)) {
+    switch (thousands) {
+      case 0: break;
+      case 1: audioFiles.unshift('thousand'); audioFiles.unshift('one');   break;
+      case 2: audioFiles.unshift('thousand'); audioFiles.unshift('two');   break;
+      case 3: audioFiles.unshift('thousand'); audioFiles.unshift('three'); break;
+      case 4: audioFiles.unshift('thousand'); audioFiles.unshift('four');  break;
+      case 5: audioFiles.unshift('thousand'); audioFiles.unshift('five');  break;
+      case 6: audioFiles.unshift('thousand'); audioFiles.unshift('six');   break;
+      case 7: audioFiles.unshift('thousand'); audioFiles.unshift('seven'); break;
+      case 8: audioFiles.unshift('thousand'); audioFiles.unshift('eight'); break;
+      case 9: audioFiles.unshift('thousand'); audioFiles.unshift('nine');  break;
     }
-
-    return root;
-  }
-
-  //TODO: how do we add the na?
-
-  //no teens in Swahili
-  if (place === 1) {
-    // const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber);
-    const root = [];
-    switch (digit) {
-      case 1: root.push('kumi'); break;
-      case 2: root.push('ishirini'); break;
-      case 3: root.push('thelathini'); break;
-      case 4: root.push('arobaini'); break;
-      case 5: root.push('hamsini'); break;
-      case 6: root.push('sitini'); break;
-      case 7: root.push('sabini'); break;
-      case 8: root.push('themanini'); break;
-      case 9: root.push('tisini'); break;
+  } else {
+    //No nextDigit
+    switch (thousands) {
+      case 0: break;
+      case 1: audioFiles.unshift('one'); audioFiles.unshift('thousand'); break;
+      case 2: audioFiles.unshift('two'); audioFiles.unshift('thousand'); break;
+      case 3: audioFiles.unshift('three'); audioFiles.unshift('thousand'); break;
+      case 4: audioFiles.unshift('four'); audioFiles.unshift('thousand'); break;
+      case 5: audioFiles.unshift('five'); audioFiles.unshift('thousand'); break;
+      case 6: audioFiles.unshift('six'); audioFiles.unshift('thousand'); break;
+      case 7: audioFiles.unshift('seven'); audioFiles.unshift('thousand'); break;
+      case 8: audioFiles.unshift('eight'); audioFiles.unshift('thousand'); break;
+      case 9: audioFiles.unshift('nine'); audioFiles.unshift('thousand'); break;
     }
-
-    return root;
   }
 
-  if (place === 2) {
-    //Hundreds, recurse! - ignore the next digit as it isn't relevent to hundreds
-    let root: string[] = [];
-    if (digit === 0) {
-      return root;
+  /* Ten Thousands */
+  if (isNullOrUndefined(tenThousands)) {
+    return audioFiles;
+  }
+
+  if (thousands > 0) {
+    audioFiles.unshift('and');
+  }
+
+  switch (tenThousands) {
+    case 0: break;
+    case 1: audioFiles.unshift('ten'); break;
+    case 2: audioFiles.unshift('twenty'); break;
+    case 3: audioFiles.unshift('thirty'); break;
+    case 4: audioFiles.unshift('forty'); break;
+    case 5: audioFiles.unshift('fifty'); break;
+    case 6: audioFiles.unshift('sixty'); break;
+    case 7: audioFiles.unshift('seventy'); break;
+    case 8: audioFiles.unshift('eighty'); break;
+    case 9: audioFiles.unshift('ninety'); break;
+  }
+
+  /* Hundred thousands */
+  const hundredThousands = digits[5];
+  if (isNullOrUndefined(hundredThousands)) {
+    return audioFiles;
+  }
+
+  switch (hundredThousands) {
+    case 0: break;
+    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
+    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
+    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
+    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
+    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
+    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
+    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
+    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
+    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
+  }
+
+  /* Millions */
+  const millions = digits[6];
+  //lookahead
+  const tenMillions = digits[7];
+  if (!isNullOrUndefined(tenMillions)) {
+    switch (millions) {
+      case 0: break;
+      case 1: audioFiles.unshift ('million'); audioFiles.unshift('one');   break;
+      case 2: audioFiles.unshift ('million'); audioFiles.unshift('two');   break;
+      case 3: audioFiles.unshift ('million'); audioFiles.unshift('three'); break;
+      case 4: audioFiles.unshift ('million'); audioFiles.unshift('four');  break;
+      case 5: audioFiles.unshift ('million'); audioFiles.unshift('five');  break;
+      case 6: audioFiles.unshift ('million'); audioFiles.unshift('six');   break;
+      case 7: audioFiles.unshift ('million'); audioFiles.unshift('seven'); break;
+      case 8: audioFiles.unshift ('million'); audioFiles.unshift('eight'); break;
+      case 9: audioFiles.unshift ('million'); audioFiles.unshift('nine');  break;
     }
-    
-    root.push('mia');
-    // root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, originalNumber));
-    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber / 100), group));
-    return root;
+  } else {
+    //No nextDigit
+    switch (millions) {
+      case 0: break;
+      case 1: audioFiles.unshift('one'); audioFiles.unshift('million'); break;
+      case 2: audioFiles.unshift('two'); audioFiles.unshift('million'); break;
+      case 3: audioFiles.unshift('three'); audioFiles.unshift('million'); break;
+      case 4: audioFiles.unshift('four'); audioFiles.unshift('million'); break;
+      case 5: audioFiles.unshift('five'); audioFiles.unshift('million'); break;
+      case 6: audioFiles.unshift('six'); audioFiles.unshift('million'); break;
+      case 7: audioFiles.unshift('seven'); audioFiles.unshift('million'); break;
+      case 8: audioFiles.unshift('eight'); audioFiles.unshift('million'); break;
+      case 9: audioFiles.unshift('nine'); audioFiles.unshift('million'); break;
+    }
   }
 
-  if (place === 3) {
-    //Thousands, recurse!
-    let root = [];
-    root.push('elfu');
-    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber / 1000), group));
-    return root;
+  /* Ten Millions */
+  if (isNullOrUndefined(tenMillions)) {
+    return audioFiles;
   }
 
-  if (place === 4) {
-    //Ten Thousands, just use the tens
-    let root = [];
-    root.push('kumi');
-    root = root.concat(V1_1_fileForNumberAndPlace(digit, 0, Math.floor(originalNumber), group));
-    return root;
+  if (millions > 0) {
+    audioFiles.unshift('and');
   }
 
-  if (place === 5) {
-    //Hundred Thousands, just use the hundreds
-    const root = V1_1_fileForNumberAndPlace(digit, 2, originalNumber, group);
-    return root;
+  switch (tenMillions) {
+    case 0: break;
+    case 1: audioFiles.unshift('ten'); break;
+    case 2: audioFiles.unshift('twenty'); break;
+    case 3: audioFiles.unshift('thirty'); break;
+    case 4: audioFiles.unshift('forty'); break;
+    case 5: audioFiles.unshift('fifty'); break;
+    case 6: audioFiles.unshift('sixty'); break;
+    case 7: audioFiles.unshift('seventy'); break;
+    case 8: audioFiles.unshift('eighty'); break;
+    case 9: audioFiles.unshift('ninety'); break;
   }
 
-  if (place === 6) {
-    //Millions,
-    const root = V1_1_fileForNumberAndPlace(digit, 0, originalNumber, group);
-
-    root.push('million');
-    return root;
+  /* Hundred Millions */
+  const hundredMillion = digits[8];
+  if (isNullOrUndefined(hundredMillion)) {
+    return audioFiles;
   }
 
-  if (place === 7) {
-    //10-millions,
-    const root = V1_1_fileForNumberAndPlace(digit, 1, originalNumber, group);
-
-    return root;
-  }
-
-  return [];
-}
-
-
-/**
- * Combine multiple arrays, for millions, thousands and zeros.
- * 
- * TODO: generalize for broader numbers
- * @returns Array<string> - combined arrays
- */
-function glueFiles(filesArrays: Array<Array<string>>): Array<string> {
-  const [audioFilesMillions, audioFilesThousands, audioFilesZeros] = filesArrays;
-  let audioFiles: string[] = [];
-
-  if (audioFilesMillions.length > 0) {
-    audioFiles = audioFiles.concat(audioFilesMillions);
-    audioFiles.push('milioni');
-  }
-
-  if (audioFilesThousands.length > 0) {
-    audioFiles = audioFiles.concat(audioFilesThousands);
-
-    //Don't add the elfu if there is no 000s, this is already taken care of for us
-    //Hmm this doesn't generalize well. We want to glue the elfu in some cases, but not all.
-    //Maybe if there is a `na` present, then we know to add the elfu?
-    // if (audioFilesZeros.length > 0) {
-    //   audioFiles.push('elfu');
-    // }
-  }
-
-  if (audioFilesZeros.length > 0) {
-    audioFiles = audioFiles.concat(audioFilesZeros);
+  switch (hundredMillion) {
+    case 0: break;
+    case 1: audioFiles.unshift('one'); audioFiles.unshift('hundred'); break;
+    case 2: audioFiles.unshift('two'); audioFiles.unshift('hundred'); break;
+    case 3: audioFiles.unshift('three'); audioFiles.unshift('hundred'); break;
+    case 4: audioFiles.unshift('four'); audioFiles.unshift('hundred'); break;
+    case 5: audioFiles.unshift('five'); audioFiles.unshift('hundred'); break;
+    case 6: audioFiles.unshift('six'); audioFiles.unshift('hundred'); break;
+    case 7: audioFiles.unshift('seven'); audioFiles.unshift('hundred'); break;
+    case 8: audioFiles.unshift('eight'); audioFiles.unshift('hundred'); break;
+    case 9: audioFiles.unshift('nine'); audioFiles.unshift('hundred'); break;
   }
 
   return audioFiles;
 }
 
-
 export default {
-  builder: V1_1_fileForNumberAndPlace,
-  glue: glueFiles,
+  numberBuilder
 }
-
-

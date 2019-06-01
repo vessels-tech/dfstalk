@@ -4,7 +4,7 @@ import {
   languageSelector, NumberBuilderFunctionType,
 } from '../models';
 import { splitNumberIntoDigits, splitByZeros } from "../utils/NumberUtils";
-import newBuildSwahili from "../models/SwahiliNew";
+import newBuildSwahili from "../models/Swahili";
 
 export enum NumberPlaceEnum {
   Zeros = 'Zeros',
@@ -29,10 +29,14 @@ export default class NumberBuilder {
    */
   public static buildNumber(number: number, language: string): Promise<SomeResult<string[]>> {
 
-    // const builderResult = languageSelector(language);
-    // if (builderResult.type === ResultType.ERROR) {
-    //   return Promise.resolve(builderResult);
-    // }
+    const builderResult = languageSelector(language);
+    if (builderResult.type === ResultType.ERROR) {
+      return Promise.resolve(builderResult);
+    }
+
+    const numberBuilder = builderResult.result.numberBuilder;
+
+
 
     // const buildFromDigits = (digitPlaces: number[], myBuilder: NumberBuilderFunctionType, place: NumberPlaceEnum): string[] => {
     //   const placeAudioFiles: string[] = [];
@@ -71,7 +75,7 @@ export default class NumberBuilder {
     //model.glueNumbers(audioFilesMillions, audioFilesThousands, audioFilesZeros);
     
     // const audioFiles: Array<string> = glue([audioFilesMillions, audioFilesThousands, audioFilesZeros]);
-    const audioFiles: Array<string> = newBuildSwahili(number);
+    const audioFiles: Array<string> = numberBuilder(number);
 
     
 
