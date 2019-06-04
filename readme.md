@@ -1,4 +1,3 @@
-# DFSTalk
 ![dfstalk_logo](./public/logo.png)
 
 ### DFSTalk is an Text-to-Speech Library for converting numbers and dates into multi-lingual audio
