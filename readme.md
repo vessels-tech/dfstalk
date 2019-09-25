@@ -1,6 +1,6 @@
 ![dfstalk_logo](./public/logo.png)
 
-### DFSTalk is an Text-to-Speech Library for converting numbers and dates into multi-lingual audio
+### DFSTalk is a Text-to-Speech Library for converting numbers and dates into multi-lingual audio
 
 ## Motivation
 
@@ -143,8 +143,7 @@ Copyright (c) 2019 Vessels Tech
 
 ## Funders
 
-All of this work is made possible with generous funding from [DFSLab](https://dfslab.net/), a Funtech incubator backed by the Bill and Melinda Gates Foundation.
+All of this work is made possible with generous funding from [DFSLab](https://dfslab.net/).
 
 <img src="./docs/img/dfs_logo.jpg" width="200">
-<img src="./docs/img/gates_logo.jpg" width="200">
 
