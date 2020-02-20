@@ -5,10 +5,13 @@ interface Credentials {
   password: string;
 }
 
+type VoiceType = 'male' | 'female';
+
 export class DFSTalk {
-  protected url: string = 'https://us-central1-dfs-talk.cloudfunctions.net';
+  protected url: string = 'https://us-central1-dfs-talk.cloudfunctions.net/number';
   protected defaultLanguage: string | undefined;
   protected credentials: Credentials;
+  protected static availableLanguages: { [host: string]: { [language: string]: boolean}} = {};
 
   /**
    * create a new instance of DFSTalk client library
@@ -36,7 +39,7 @@ export class DFSTalk {
   async say(
     number: number,
     language?: string,
-    voiceType?: 'male' | 'female'
+    voiceType?: VoiceType
   ): Promise<{ url: string, expiry: Date }> {
     language = language || this.defaultLanguage;
     voiceType = voiceType || 'male';
@@ -44,13 +47,23 @@ export class DFSTalk {
       throw new Error('Language must be defined in the constructor or passed as a parameter');
     }
 
+    const languageString = `${language}_${voiceType}`;
+    const languageExists = await this.checkIfLanguageExists(languageString);
+    if (!languageExists) {
+      throw new Error(`requested language (${languageString}) does not exist`);
+    }
+
     const url = `${this.url}/number`;
     const fetchResult = await fetch(url, {
-      headers: { ...this.getAuthorizationHeader() },
+      headers: {
+        ...this.getAuthorizationHeader(),
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        language: `${language}_${voiceType}`,
+        language: languageString,
         number
-      })
+      }),
+      method: 'POST'
     });
 
     const jsonResult = await fetchResult.json();
@@ -68,7 +81,11 @@ export class DFSTalk {
   async getAvailableLanguages(): Promise<string[]> {
     const url = `${this.url}/number/languages`;
     const fetchResult = await fetch(url, { headers: { ...this.getAuthorizationHeader() } });
-    return fetchResult.json();
+    const jsonResult = await fetchResult.json();
+
+    this.updateAvailableLanguages(jsonResult);
+
+    return jsonResult;
   }
 
   private authHeader: string | undefined;
@@ -78,6 +95,33 @@ export class DFSTalk {
       this.authHeader = Buffer.from(textToEncode).toString('base64');
     }
 
-    return { Authorization: this.authHeader };
+    return { Authorization: `Basic ${this.authHeader}` };
+  }
+
+  protected async updateAvailableLanguages(languages: string[]): Promise<void>;
+  protected async updateAvailableLanguages(): Promise<void>;
+  protected async updateAvailableLanguages(languages?: string[]): Promise<void> {
+    const host = this.url;
+
+    const availableLanguages = typeof languages === 'undefined'
+      ? await this.getAvailableLanguages()
+      : languages;
+
+    DFSTalk.availableLanguages[host] = {};
+    for (const language of availableLanguages) {
+      DFSTalk.availableLanguages[host][language] = true;
+    }
+  }
+
+  protected async checkIfLanguageExists(languageString: string): Promise<boolean>;
+  protected async checkIfLanguageExists(language: string, voice: VoiceType): Promise<boolean>;
+  protected async checkIfLanguageExists(languageCode: string, voice?: VoiceType): Promise<boolean> {
+    const languageString = typeof voice === 'undefined' ? languageCode : `${languageCode}_${voice}`;
+    const host = this.url;
+    if (typeof DFSTalk.availableLanguages[host] === 'undefined') {
+      await this.updateAvailableLanguages();
+    }
+
+    return DFSTalk.availableLanguages[host][languageString];
   }
 }
