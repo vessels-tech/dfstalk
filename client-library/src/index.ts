@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { createHash } from 'crypto';
 
 interface Credentials {
   username: string;
@@ -7,11 +8,16 @@ interface Credentials {
 
 type VoiceType = 'male' | 'female';
 
+interface SayResult { url: string, expiry: Date };
+interface CachedSayResult extends SayResult { cachedTime: Date };
+
 export class DFSTalk {
   protected url: string = 'https://us-central1-dfs-talk.cloudfunctions.net/number';
   protected defaultLanguage: string | undefined;
   protected credentials: Credentials;
-  protected static availableLanguages: { [host: string]: { [language: string]: boolean}} = {};
+  protected static availableLanguages: { [host: string]: { [language: string]: boolean} } = {};
+  protected static audioCache: { [host: string ]: { [key: string]: CachedSayResult } } = {};
+  protected format: string;
 
   /**
    * create a new instance of DFSTalk client library
@@ -22,11 +28,13 @@ export class DFSTalk {
   constructor(config: {
     url?: string,
     language?: string,
-    credentials: Credentials
+    credentials: Credentials,
+    format?: 'mp3' | 'asterisk_sln'
   }) {
     this.url = config.url || this.url;
     this.defaultLanguage = config.language;
     this.credentials = config.credentials;
+    this.format = config.format || 'mp3';
   }
 
   /**
@@ -40,7 +48,7 @@ export class DFSTalk {
     number: number,
     language?: string,
     voiceType?: VoiceType
-  ): Promise<{ url: string, expiry: Date }> {
+  ): Promise<SayResult> {
     language = language || this.defaultLanguage;
     voiceType = voiceType || 'male';
     if (typeof language === 'undefined') {
@@ -53,6 +61,21 @@ export class DFSTalk {
       throw new Error(`requested language (${languageString}) does not exist`);
     }
 
+    if (!DFSTalk.audioCache[this.url]) {
+      DFSTalk.audioCache[this.url] = {};
+    }
+    
+    const cacheKey = this.getCacheKey(number, language, voiceType);
+    if (DFSTalk.audioCache[this.url][cacheKey]) {
+      const cachedEntry = DFSTalk.audioCache[this.url][cacheKey];
+      const milliSecondsSinceCached = Date.now() - cachedEntry.cachedTime.getTime();
+      const timeTillExpiry = cachedEntry.expiry.getTime() - milliSecondsSinceCached;
+
+      if (timeTillExpiry > 0) {
+        return cachedEntry;
+      }
+    }
+
     const url = `${this.url}/number`;
     const fetchResult = await fetch(url, {
       headers: {
@@ -61,16 +84,32 @@ export class DFSTalk {
       },
       body: JSON.stringify({
         language: languageString,
-        number
+        number,
+        format: this.format
       }),
       method: 'POST'
     });
 
     const jsonResult = await fetchResult.json();
-    return {
+    const response = {
       url: jsonResult.url,
       expiry: new Date(Date.now() + (jsonResult.expiry * 1000))
     };
+    console.log(response)
+
+    DFSTalk.audioCache[this.url][cacheKey] = {
+      ...response,
+      cachedTime: new Date()
+    };
+
+    return response
+  }
+
+  protected getCacheKey(number: number, language: string, voiceType: string) {
+    const creds = `${this.credentials.username}_${this.credentials.password}`;
+    const key = `${creds}_${number}_${language}_${voiceType}`;
+
+    return createHash('md5').update(key).digest('hex');
   }
 
   /**
