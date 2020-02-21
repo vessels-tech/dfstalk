@@ -9,7 +9,7 @@ import enableLogging from '../utils/Logging';
 import { validateBasicAuth } from '../middleware/Auth';
 import { unsafeUnwrap } from '../utils/AppProviderTypes';
 import NumberBuilder from '../api/NumberBuilder';
-import FileBuilder from '../api/FileBuilder';
+import FileBuilder, { FileBuilderFormats } from '../api/FileBuilder';
 import { uploadPublicFile } from '../api/FBStorageApi';
 import { rateLimit } from '../middleware/RateLimit';
 
@@ -44,13 +44,22 @@ module.exports = (functions: any) => {
    * @description Specify the number and language to generate an audio file
    */
   app.post('/number', validate(CreateNumberValidation), async (req, res) => {
-    const { language, number } = req.body;
+    const { language, number, format } = <{language: string; number: number; format?: string}>req.body;
 
     //Using NumberBuilder, generate a list of audio files to be compiled
     const audioFiles = unsafeUnwrap(await NumberBuilder.buildNumber(number, language));
 
+    // check if requested file format exists
+    let fileFormat = FileBuilderFormats.MP3;
+    if (typeof format !== 'undefined') {
+      const formatUppercase = format.toUpperCase()
+      if (typeof FileBuilderFormats[formatUppercase] !== 'undefined') {
+        fileFormat = FileBuilderFormats[formatUppercase];
+      }
+    }
+
     //Using FileBuilder, load files and append into a single file
-    const file = unsafeUnwrap(await FileBuilder.createFile(audioFiles, language));
+    const file = unsafeUnwrap(await FileBuilder.createFile(audioFiles, language, fileFormat));
 
     const expiry = 60 * 60; //60 minutes
     const publicUrl = unsafeUnwrap(await uploadPublicFile(file, expiry));

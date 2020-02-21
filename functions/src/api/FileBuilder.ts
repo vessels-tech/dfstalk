@@ -6,6 +6,38 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
 const FfmpegCommand = require('fluent-ffmpeg')
 FfmpegCommand.setFfmpegPath(ffmpegPath)
 
+export type AudioFileFormat = {
+  samplingFrequency?: number,
+  channels?: number,
+  codec?: string,
+  format?: string
+  extension: string
+};
+
+const AudioFileFormatFfmpegMapping = {
+  samplingFrequency: '-ar',
+  channels: '-ac',
+  codec: '-acodec',
+  format: '-f'
+}
+
+export const FileBuilderFormats: {
+  MP3: AudioFileFormat
+  ASTERISK_SLN: AudioFileFormat
+  [format: string]: AudioFileFormat
+} = {
+  MP3: {
+    extension: 'mp3',
+    codec: 'copy'
+  },
+  ASTERISK_SLN: {
+    samplingFrequency: 8000,
+    channels: 1,
+    codec: 'pcm_s16le',
+    format: 's16le',
+    extension: 'sln'
+  }
+}
 
 /**
  * FileBuilder stitches together files for a given language
@@ -22,23 +54,40 @@ class FileBuilder {
    * @returns Promise<SomeResult> containing the local url of the file
    */
 
-  public static async createFile(audioFiles: string[], language: string): Promise<SomeResult<string>> {
+  public static async createFile(
+    audioFiles: string[],
+    language: string,
+    format: AudioFileFormat = FileBuilderFormats.MP3
+  ): Promise<SomeResult<string>> {
     const audioDir = `${__dirname}/../../src/audio/en_AU_male`;
-    return concatAudioPromise(audioDir, audioFiles);
+    return concatAudioPromise(audioDir, audioFiles, format);
   }
 }
 
-function concatAudioPromise(basePath: string, audioFiles: string[]): Promise<SomeResult<any>> {
+function concatAudioPromise(
+  basePath: string,
+  audioFiles: string[],
+  format: AudioFileFormat = FileBuilderFormats.MP3
+): Promise<SomeResult<any>> {
   const filesWithPath = audioFiles.map(f => `${basePath}/${f}.mp3`);
   const filename = uuidv4();
   const fullFile = `/tmp/${filename}.mp3`;
 
   return new Promise((resolve, reject) => {
+    const outputOptions: string[] = [];
+    for (const option of Object.keys(format)) {
+      const outputOptionParam = (AudioFileFormatFfmpegMapping as any)[option];
+      const outputOptionValue = (format as any)[option];
+
+      if (outputOptionParam && outputOptionValue) {
+        outputOptions.push(`${outputOptionParam} ${outputOptionValue}`)
+      }
+    }
 
     const filter = 'concat:' + filesWithPath.join('|')
     const renderer = FfmpegCommand()
       .input(filter)
-      .outputOptions('-acodec copy')
+      .outputOptions(outputOptions)
 
     renderer.save(fullFile)
       .on('error', function (err: any, stdout: any, stderr: any) {
