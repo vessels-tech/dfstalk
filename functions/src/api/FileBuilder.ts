@@ -71,7 +71,7 @@ function concatAudioPromise(
 ): Promise<SomeResult<any>> {
   const filesWithPath = audioFiles.map(f => `${basePath}/${f}.mp3`);
   const filename = uuidv4();
-  const fullFile = `/tmp/${filename}.mp3`;
+  const fullFile = `/tmp/${filename}.${format.extension}`;
 
   return new Promise((resolve, reject) => {
     const outputOptions: string[] = [];

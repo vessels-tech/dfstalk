@@ -6,6 +6,7 @@ declare const validation: {
     body: {
         language: Joi.StringSchema;
         number: Joi.NumberSchema;
+        format: Joi.StringSchema;
     };
 };
 export default validation;

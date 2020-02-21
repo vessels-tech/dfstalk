@@ -88,6 +88,12 @@ definitions:
       number:
         type: "number"
         description: "The number to generate the audio for"
+      format:
+        type: "string"
+        description: "Format to return audio in"
+        enum:
+        - "mp3"
+        - "asterisk_sln"
       
   NumberResponse:
     type: "object"
