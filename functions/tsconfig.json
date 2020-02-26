@@ -3,7 +3,8 @@
     "node_modules/typescript/lib/lib.es6.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.unit.ts"
   ],
   "compileOnSave": true,
   "include": [

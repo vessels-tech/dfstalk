@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "../utils/isNullOrUndefined";
 import { getNextAndLastDigit } from "../utils/NumberUtils";
 import { NumberPlaceEnum } from "../api/NumberBuilder";
 
