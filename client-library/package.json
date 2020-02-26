@@ -1,11 +1,13 @@
 {
   "name": "dfstalk-client",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha.0",
   "description": "Client library for DFSTalk",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "npm run build",
+    "postpublish": "npm version prerelease --preid=alpha -m \"Bumped version number to %s [ci skip]\""
   },
   "repository": {
     "type": "git",
