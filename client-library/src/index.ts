@@ -8,8 +8,8 @@ interface Credentials {
 
 type VoiceType = 'male' | 'female';
 
-interface SayResult { url: string, expiry: Date };
-interface CachedSayResult extends SayResult { cachedTime: Date };
+interface SayResult { url: string, expiry: Date }
+interface CachedSayResult extends SayResult { cachedTime: Date }
 
 export class DFSTalk {
   protected url: string = 'https://us-central1-dfs-talk.cloudfunctions.net/number';
@@ -64,7 +64,7 @@ export class DFSTalk {
     if (!DFSTalk.audioCache[this.url]) {
       DFSTalk.audioCache[this.url] = {};
     }
-    
+
     const cacheKey = this.getCacheKey(number, language, voiceType);
     if (DFSTalk.audioCache[this.url][cacheKey]) {
       const cachedEntry = DFSTalk.audioCache[this.url][cacheKey];
@@ -95,14 +95,13 @@ export class DFSTalk {
       url: jsonResult.url,
       expiry: new Date(Date.now() + (jsonResult.expiry * 1000))
     };
-    console.log(response)
 
     DFSTalk.audioCache[this.url][cacheKey] = {
       ...response,
       cachedTime: new Date()
     };
 
-    return response
+    return response;
   }
 
   protected getCacheKey(number: number, language: string, voiceType: string) {
