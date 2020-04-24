@@ -1,4 +1,9 @@
 import { SomeResult } from "../utils/AppProviderTypes";
+export declare enum NumberPlaceEnum {
+    Zeros = "Zeros",
+    Thousands = "Thousands",
+    Millions = "Millions"
+}
 export default class NumberBuilder {
     /**
      * Given a number and a language, generate an array of audio files that

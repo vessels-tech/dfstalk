@@ -3,7 +3,7 @@
  */
 
 import { splitNumberIntoDigits } from "../utils/NumberUtils";
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "../utils/isNullOrUndefined";
 
 
 function numberBuilder(num: number): Array<string> {

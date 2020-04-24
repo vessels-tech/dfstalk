@@ -1,4 +1,7 @@
 import { SomeResult } from '../utils/AppProviderTypes';
-export declare type NumberBuilderFunctionType = (digit: number, place: number, lastDigit?: number, nextDigit?: number) => string[];
-declare function languageSelector(language: string): SomeResult<NumberBuilderFunctionType>;
+export declare type NumberBuilderFunctionType = (num: number) => Array<string>;
+export declare type ModelType = {
+    numberBuilder: NumberBuilderFunctionType;
+};
+declare function languageSelector(language: string): SomeResult<ModelType>;
 export { languageSelector };

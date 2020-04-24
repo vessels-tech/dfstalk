@@ -1,7 +1,6 @@
-import { isNullOrUndefined } from "util";
-import { getNextAndLastDigit, splitByZeros } from "../utils/NumberUtils";
+import { isNullOrUndefined } from "../utils/isNullOrUndefined";
+import { getNextAndLastDigit } from "../utils/NumberUtils";
 import { NumberPlaceEnum } from "../api/NumberBuilder";
-import { ModelType } from ".";
 
 
 /**

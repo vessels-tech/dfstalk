@@ -1,5 +1,4 @@
-import { isNullOrUndefined } from "util";
-import { func } from "joi";
+import { isNullOrUndefined } from "../utils/isNullOrUndefined";
 import { splitNumberIntoDigits } from "../utils/NumberUtils";
 
 /**
@@ -55,7 +54,7 @@ const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number,
           case 0: return ['ten'];
           case 1: return ['eleven'];
           case 2: return ['twelve'];
-          case 3: return ['thirtheen'];
+          case 3: return ['thirteen'];
           case 4: return ['fourteen'];
           case 5: return ['fifteen'];
           case 6: return ['sixteen'];
@@ -78,7 +77,9 @@ const fileForNumberAndPlace = (digit: number, place: number, lastDigit?: number,
   if (place === 2) {
     //Hundreds, recurse! - ignore the next digit as it isn't relevent to hundreds
     const root = fileForNumberAndPlace(digit, 0, lastDigit);
-    root.push('hundred');
+    if (digit !== 0) {
+      root.push('hundred');
+    }
     return root;
   }
 
