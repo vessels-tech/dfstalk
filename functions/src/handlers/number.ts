@@ -104,6 +104,7 @@ module.exports = (functions: any) => {
 
     res.json([
       'en_AU_male',
+      'eng_male', //replaces `en_AU_male`
       'sw_TZ_male',
     ]);
   });

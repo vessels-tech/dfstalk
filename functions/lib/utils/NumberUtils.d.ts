@@ -1,7 +1,7 @@
 /**
  * Split a number into individual digits, starting from the end of the number
  */
-export declare const splitNumberIntoDigits: (num: number) => number[];
+export declare const splitNumberIntoDigits: (num: number) => Array<number>;
 /**
  * Given a number and the place in that number, get the next and last digit, when iterating through each digit right to left
  *

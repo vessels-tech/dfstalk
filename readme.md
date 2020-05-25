@@ -128,6 +128,16 @@ The process will change for each language, but follow these rough steps:
 - Record the audio each word, and add to `functions/audio/<language_code>/`
 
 
+## Deploying a new Language
+
+```bash
+firebase login #only if you haven't logged in in some time
+cd functions && npm install
+
+make switch-prod
+make admin-deploy-audio
+```
+
 ## License
 
 DFSTalk is licensed under a GNU GPL v3.0 license. See the LICENSE file for more info.

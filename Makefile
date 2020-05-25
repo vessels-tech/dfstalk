@@ -54,6 +54,9 @@ build:
 	cd $(dir)/functions; yarn run build
 	# cp $(dir)/functions/src/index.js $(dir)/functions/lib/index.js
 
+watch:
+	cd $(dir)/functions; yarn run watch
+
 lint: 
 	cd $(dir)/functions; yarn run lint
 
