@@ -105,6 +105,7 @@ module.exports = (functions: any) => {
     res.json([
       'en_AU_male',
       'eng_male', //a subset of `en_AU_male`
+      'mnk_male', //mandinka, not all numbers
       'sw_TZ_male',
     ]);
   });
