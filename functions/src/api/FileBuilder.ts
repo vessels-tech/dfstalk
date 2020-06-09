@@ -59,7 +59,7 @@ class FileBuilder {
     language: string,
     format: AudioFileFormat = FileBuilderFormats.MP3
   ): Promise<SomeResult<string>> {
-    const audioDir = `${__dirname}/../../src/audio/en_AU_male`;
+    const audioDir = `${__dirname}/../../src/audio/${language}`;
     return concatAudioPromise(audioDir, audioFiles, format);
   }
 }
