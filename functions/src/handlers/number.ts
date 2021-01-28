@@ -106,6 +106,8 @@ module.exports = (functions: any) => {
       'en_AU_male',
       'eng_male', //a subset of `en_AU_male`
       'mnk_male', //mandinka, not all numbers
+      'wol_male', //wolof, not all numbers
+      'ful_male', //fula, not all numbers
       'sw_TZ_male',
     ]);
   });

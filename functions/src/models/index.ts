@@ -4,6 +4,8 @@ import english from "./English";
 import englishLimited from "./EnglishLimited";
 import mandinkaLimited from "./MandinkaLimited";
 import { SomeResult, makeSuccess, makeError } from '../utils/AppProviderTypes';
+import WolofLimited from "./WolofLimited";
+import FulaLimited from "./FulaLimited";
 
 export type NumberBuilderFunctionType = (num: number) => Array<string>;
 export type ModelType = {
@@ -17,7 +19,8 @@ function languageSelector(language: string): SomeResult<ModelType> {
     case 'eng_male': return makeSuccess(englishLimited);
     // A limited list of mandinka numbers - for uncdf-gmb
     case 'mnk_male': return makeSuccess(mandinkaLimited);
-    // TODO: add wol, ful
+    case 'wol_male': return makeSuccess(WolofLimited);
+    case 'ful_male': return makeSuccess(FulaLimited);
     case 'sw_TZ_male': return makeSuccess(swahili);
     case 'sw_TZ_male_english': return makeSuccess(swahiliEnglish);
     default:
