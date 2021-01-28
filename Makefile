@@ -7,24 +7,10 @@ include .config
 include ./env/env_compiled
 
 
-# admin_dir := $(dir)/functions/src/admin
 env_dir := $(dir)/env
 
 #Add in admin node modules executable
 PATH := $(admin_dir)/node_modules/.bin:$(PATH)
-
-##
-# Admin Tools
-## 
-
-admin-deploy-audio:
-	@echo ${admin_dir}
-	cd ${admin_dir} && gulp deploy_audio
-
-admin-deploy-config:
-	@echo ${admin_dir}
-	cd ${admin_dir} && gulp deploy_config
-
 
 ##
 # Env Setup

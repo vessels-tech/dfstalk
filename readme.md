@@ -134,8 +134,9 @@ The process will change for each language, but follow these rough steps:
 firebase login #only if you haven't logged in in some time
 cd functions && npm install
 
+cd ..
 make switch-prod
-make admin-deploy-audio
+make deploy
 ```
 
 ## License
